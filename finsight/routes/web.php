@@ -9,3 +9,7 @@ Route::get('/', function () {
 use App\Http\Controllers\ProcurementController;
 
 Route::get('/procurement', [ProcurementController::class, 'index']);
+
+Route::get('/coba', function () {
+    return view('coba-tailwind'); // Nama file tanpa .blade.php
+});

@@ -16,147 +16,231 @@
     </style>
 </head>
 <body class="text-slate-800 antialiased flex h-screen overflow-hidden">
+  <!-- Desktop Sidebar -->
+  <aside class="hidden lg:flex lg:w-72 lg:flex-col lg:border-r lg:border-gray-200 lg:bg-white">
+    <div class="flex flex-col gap-y-2 overflow-y-auto px-6 pb-4">
+      
+      <!-- Header (Team/Logo) -->
+      <div class="flex shrink-0 items-center mt-4">
+        <div class="flex items-center gap-x-3 w-full p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+          <!-- Menggunakan w-auto dan object-contain agar gambar tidak gepeng/lonjong -->
+          <img class="h-8 w-auto object-contain rounded-md" src="/logo_finsight.jpeg" alt="Logo FinSight">
+        </div>
+      </div>
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col flex-shrink-0 h-full overflow-y-auto">
-        <!-- Logo -->
-        <div class="h-16 flex items-center px-6 border-b border-slate-100">
-            <svg class="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-            <span class="text-xl font-bold text-blue-600">FinSight</span>
+      <!-- Bagian MAIN NAVIGATION dan Menu digabung agar jaraknya dekat -->
+      <div class="flex flex-col gap-y-2">
+        <!-- Wrapper dengan border-b untuk memunculkan garis -->
+        <div class="border-b border-gray-200 pb-0">
+          <div class="px-2 pt-2 pb-1 text-sm font-semibold leading-6 text-gray-500 uppercase tracking-wider">
+            MAIN NAVIGATION
+          </div>
         </div>
 
-        <!-- Navigation -->
-        <nav class="flex-1 px-4 py-6 space-y-8">
+        <!-- Quick Actions (Search, Inbox) -->
+        <ul role="list" class="-mx-2 space-y-1">
+        <li>
+          <a href="#" class="text-gray-700 hover:text-gray-900 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6">
+                  <svg class="h-5 w-5 shrink-0 text-gray-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" /></svg>
+                  Home
+            </a>
+        </li>
+        <li>
+          <!-- Gunakan tag details/summary agar bisa di-klik buka/tutup tanpa Javascript -->
+          <details class="group" open>
+            <summary class="flex cursor-pointer gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:text-gray-900 hover:bg-gray-50 list-none items-center justify-between">
+              <div class="flex items-center gap-x-3">
+                <svg class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                </svg>
+                End-to-End Process
+            </div>
+              <svg class="h-4 w-4 text-gray-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </summary>
             
-            <!-- MAIN NAVIGATION -->
-            <div>
-                <div class="text-xs font-semibold text-slate-400 mb-4 tracking-wider">MAIN NAVIGATION</div>
-                <ul class="space-y-1">
+            <!-- Isi dari End to End Process -->
+              <li>
+                <a href="#" class="flex items-center gap-x-3 rounded-md p-2 pl-10 text-sm leading-6 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                  <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25h6m-6-2.25h6m-6-2.25h6M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>
+                  Budget Planning
+                </a>
+              </li>
+              <li>
+                <a href="#" class="flex items-center gap-x-3 rounded-md p-2 pl-10 text-sm leading-6 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                  <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  Budget Control
+                </a>
+              </li>
+              
+              <!-- Sub-menu Procurement -->
+              <li>
+                <details class="group/proc" open>
+                  <summary class="flex cursor-pointer items-center justify-between rounded-md p-2 pl-10 text-sm leading-6 text-gray-600 hover:bg-gray-50 hover:text-gray-900 list-none">
+                    <div class="flex items-center gap-x-3">
+                      <!-- Icon Cart -->
+                      <svg class="h-5 w-5 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                      Procurement
+                    </div>
+                    <!-- Panah Sub Dropdown -->
+                    <svg class="h-3 w-3 text-gray-400 transition-transform group-open/proc:-rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
+                  </summary>
+                  
+                  <ul class="mt-1 space-y-1 border-l-2 border-slate-100 ml-[3.2rem] pl-3">
                     <li>
-                        <a href="#" class="flex items-center px-2 py-2 text-sm font-medium text-slate-600 rounded-md hover:bg-slate-50 hover:text-slate-900 group">
-                            <svg class="mr-3 w-5 h-5 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                            Home
-                        </a>
+                      <a href="#" class="block rounded-md p-2 text-sm leading-6 text-gray-500 hover:bg-gray-50 hover:text-gray-900">
+                        Procurement & I2P
+                      </a>
                     </li>
-                    
-                    <!-- End-to-End Process (Expanded) -->
                     <li>
-                        <a href="#" class="flex items-center justify-between px-2 py-2 text-sm font-medium text-blue-600 bg-blue-50/50 rounded-md group">
-                            <div class="flex items-center">
-                                <svg class="mr-3 w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                                End-to-End Process
-                            </div>
-                            <svg class="w-4 h-4 text-blue-500 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </a>
-                        
-                        <!-- Sub-menu -->
-                        <ul class="mt-1 ml-6 space-y-1">
-                            <li>
-                                <a href="#" class="flex items-center px-2 py-1.5 text-sm font-medium text-slate-500 rounded-md hover:text-slate-900 group">
-                                    <svg class="mr-2 w-4 h-4 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                                    Budget Planning
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center px-2 py-1.5 text-sm font-medium text-slate-500 rounded-md hover:text-slate-900 group">
-                                    <svg class="mr-2 w-4 h-4 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    Budget Control
-                                </a>
-                            </li>
-                            
-                            <!-- Procurement (Expanded) -->
-                            <li>
-                                <a href="#" class="flex items-center justify-between px-2 py-1.5 text-sm font-medium text-slate-700 rounded-md group">
-                                    <div class="flex items-center">
-                                        <svg class="mr-2 w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                                        Procurement
-                                    </div>
-                                    <svg class="w-3 h-3 text-slate-400 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                </a>
-                                
-                                <!-- Sub-sub-menu -->
-                                <ul class="mt-1 ml-6 space-y-1 border-l-2 border-slate-100 pl-2">
-                                    <li>
-                                        <a href="#" class="block px-2 py-1.5 text-sm font-medium text-slate-500 rounded-md hover:text-slate-900">
-                                            Procurement & I2P
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block px-2 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md border-l-2 border-blue-600 -ml-[10px] pl-[10px]">
-                                            Proses Pengadaan
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            
-                            <li>
-                                <a href="#" class="flex items-center justify-between px-2 py-1.5 text-sm font-medium text-slate-500 rounded-md hover:text-slate-900 group">
-                                    <div class="flex items-center">
-                                        <svg class="mr-2 w-4 h-4 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                        Asset Tracking
-                                    </div>
-                                    <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </a>
-                            </li>
-                        </ul>
+                        <a href="/procurement" class="block rounded-md p-2 text-sm font-semibold leading-6 text-blue-600 bg-blue-50/50 hover:bg-blue-50">Proses Pengadaan</a>
                     </li>
+                  </ul>
+                </details>
+              </li>
+              
+              <li>
+                <a href="#" class="flex items-center justify-between rounded-md p-2 pl-10 text-sm leading-6 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                  <div class="flex items-center gap-x-3">
+                    <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" /></svg>
+                    Asset Tracking
+                  </div>
+                  <svg class="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                </a>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+      </div>
 
+      <!-- Main Navigation -->
+      <nav class="flex flex-1 flex-col mt-4">
+        <ul role="list" class="flex flex-1 flex-col gap-y-7">
+          <li>
+            <ul role="list" class="-mx-2 space-y-1">
+              <li>
+                <details class="group" open>
+                  <summary class="flex cursor-pointer gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:text-gray-900 hover:bg-gray-50 list-none items-center justify-between">
+                    <div class="flex items-center gap-x-3">
+                      <svg class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+                      </svg>
+                      Financial Performance
+                    </div>
+                    <svg class="h-4 w-4 text-gray-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </summary>
+                  
+                  <ul class="mt-1 space-y-1 border-l border-slate-200 ml-[1.1rem] pl-3">
                     <li>
-                        <a href="#" class="flex items-center justify-between px-2 py-2 text-sm font-medium text-slate-600 rounded-md hover:bg-slate-50 hover:text-slate-900 group">
-                            <div class="flex items-center">
-                                <svg class="mr-3 w-5 h-5 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
-                                Financial Performance
-                            </div>
-                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </a>
+                      <a href="#" class="flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                        <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                        </svg>
+                        Financial Control
+                      </a>
                     </li>
-                    
                     <li>
-                        <a href="#" class="flex items-center justify-between px-2 py-2 text-sm font-medium text-slate-600 rounded-md hover:bg-slate-50 hover:text-slate-900 group">
-                            <div class="flex items-center">
-                                <svg class="mr-3 w-5 h-5 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                Efficiency Program
-                            </div>
-                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </a>
+                      <a href="#" class="flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                        <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 19.5 16.5h-2.25m-9 0h9l-4.5-4.5m0-3 4.5 4.5M9 16.5v-3M12 16.5v-6m3 6v-9" />
+                        </svg>
+                        Profitability
+                      </a>
                     </li>
-                    
                     <li>
-                        <a href="#" class="flex items-center justify-between px-2 py-2 text-sm font-medium text-slate-600 rounded-md hover:bg-slate-50 hover:text-slate-900 group">
-                            <div class="flex items-center">
-                                <svg class="mr-3 w-5 h-5 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-                                AI Insight
-                            </div>
-                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </a>
+                      <a href="#" class="flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                        <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        Cost Efficiency
+                      </a>
                     </li>
-                </ul>
+                    <li>
+                      <a href="#" class="flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
+                        <svg class="h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+                        </svg>
+                        Investment & Return
+                      </a>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <details class="group">
+                  <summary class="flex cursor-pointer gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:text-gray-900 hover:bg-gray-50 list-none items-center justify-between">
+                    <div class="flex items-center gap-x-3">
+                      <svg class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+                      </svg>
+                      Efficiency Program
+                    </div>
+                    <svg class="h-4 w-4 text-gray-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </summary>
+                </details>
+              </li>
+              <li>
+                <details class="group">
+                  <summary class="flex cursor-pointer gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:text-gray-900 hover:bg-gray-50 list-none items-center justify-between">
+                    <div class="flex items-center gap-x-3">
+                      <svg class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                      </svg>
+                      AI Insight
+                    </div>
+                    <svg class="h-4 w-4 text-gray-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </summary>
+                </details>
+              </li>
+            </ul>
+          </li>
+        
+          <div class="flex flex-col gap-y-2">
+            <!-- Wrapper dengan border-b untuk memunculkan garis -->
+            <div class="border-b border-gray-200 pb-0">
+              <div class="px-2 pt-2 pb-1 text-sm font-semibold leading-6 text-gray-500 uppercase tracking-wider">
+              MASTER DATA
+              </div>
             </div>
-            
-            <!-- MASTER DATA -->
-            <div>
-                <div class="text-xs font-semibold text-slate-400 mb-4 tracking-wider">MASTER DATA</div>
-                <ul class="space-y-1">
-                    <li>
-                        <a href="#" class="flex items-center justify-between px-2 py-2 text-sm font-medium text-slate-600 rounded-md hover:bg-slate-50 hover:text-slate-900 group">
-                            <div class="flex items-center">
-                                <svg class="mr-3 w-5 h-5 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                                User Access Management
-                            </div>
-                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center px-2 py-2 text-sm font-medium text-slate-600 rounded-md hover:bg-slate-50 hover:text-slate-900 group">
-                            <svg class="mr-3 w-5 h-5 text-slate-400 group-hover:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            Monitoring Log
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-        </nav>
-    </aside>
+          </div>
+            <ul role="list" class="-mx-2 space-y-1">
+              <li>
+                <details class="group">
+                  <summary class="flex cursor-pointer gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:text-gray-900 hover:bg-gray-50 list-none items-center justify-between">
+                    <div class="flex items-center gap-x-3">
+                      <svg class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                      User Access Management
+                    </div>
+                    <svg class="h-4 w-4 text-gray-400 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </summary>
+                </details>
+              </li>
+              <li>
+                <a href="#" class="text-gray-700 hover:text-gray-900 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6">
+                  <svg class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z" />
+                  </svg>
+                  Monitoring Log
+                </a>
+              </li>
+            </ul>
+      </nav>
+    </div>
+  </aside>
+
 
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
@@ -182,34 +266,21 @@
             </div>
 
             <!-- Filters Section -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 mb-8">
+            <form method="GET" action="" class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 mb-8 flex flex-col gap-4">
                 
-                <!-- Row 1: Filters -->
-                <div class="flex flex-wrap items-center gap-3 mb-4">
-                    <div class="flex items-center text-slate-400 mr-2">
-                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                        <span class="text-sm font-medium">Filters :</span>
-                    </div>
+                <div class="flex items-center text-slate-700 font-semibold mb-2">
+                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                    Filter Data
+                </div>
 
-                    <!-- Progress Dropdown -->
-                    <div class="relative min-w-[140px]">
-                        <select name="progress" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-                            <option value="">All Progress</option>
-                            @foreach($progresses as $progress)
-                                <option value="{{ $progress->nama_program }}">{{ $progress->nama_program }}</option>
-                            @endforeach
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </div>
-                    </div>
-                    
+                <!-- Row 1: 4 Equal Width Dropdowns -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Budget Dropdown -->
-                    <div class="relative min-w-[140px]">
-                        <select name="budget" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                    <div class="relative">
+                        <select name="budget" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                             <option value="">All Budget</option>
                             @foreach($budgets as $budget)
-                                <option value="{{ $budget->anggaran }}">{{ $budget->anggaran }}</option>
+                                <option value="{{ $budget->anggaran }}" {{ request('budget') == $budget->anggaran ? 'selected' : '' }}>{{ $budget->anggaran }}</option>
                             @endforeach
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
@@ -218,24 +289,11 @@
                     </div>
 
                     <!-- Unit Dropdown -->
-                    <div class="relative min-w-[140px]">
-                        <select name="unit" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                    <div class="relative">
+                        <select name="unit" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                             <option value="">All Unit</option>
-                            @foreach($units as $unit)
-                                <option value="{{ $unit->unit }}">{{ $unit->unit }}</option>
-                            @endforeach
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </div>
-                    </div>
-
-                    <!-- Sub Unit Dropdown -->
-                    <div class="relative min-w-[140px]">
-                        <select name="sub_unit" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-                            <option value="">All Sub Unit</option>
-                            @foreach($subUnits as $subUnit)
-                                <option value="{{ $subUnit->cat }}">{{ $subUnit->cat }}</option>
+                            @foreach($units as $item)
+                                <option value="{{ $item->category }}" {{ request('unit') == $item->category ? 'selected' : '' }}>{{ $item->category }}</option>
                             @endforeach
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
@@ -244,11 +302,11 @@
                     </div>
 
                     <!-- Activity Dropdown -->
-                    <div class="relative min-w-[140px]">
-                        <select name="activity" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                    <div class="relative">
+                        <select name="activity" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                             <option value="">All Activity</option>
                             @foreach($activities as $activity)
-                                <option value="{{ $activity->activity }}">{{ $activity->activity }}</option>
+                                <option value="{{ $activity->activity }}" {{ request('activity') == $activity->activity ? 'selected' : '' }}>{{ $activity->activity }}</option>
                             @endforeach
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
@@ -257,14 +315,14 @@
                     </div>
 
                     <!-- Tahun Dropdown with Calendar Icon inside input -->
-                    <div class="relative min-w-[100px] ml-auto">
+                    <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
-                        <select name="tahun" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-9 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                        <select name="tahun" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-9 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                             <option value="">Tahun</option>
                             @foreach($tahuns as $tahun)
-                                <option value="{{ $tahun->tahun }}">{{ $tahun->tahun }}</option>
+                                <option value="{{ $tahun->tahun }}" {{ $selectedTahun == $tahun->tahun ? 'selected' : '' }}>{{ $tahun->tahun }}</option>
                             @endforeach
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
@@ -274,15 +332,15 @@
                 </div>
 
                 <!-- Row 2: Search/Filter -->
-                <div class="flex flex-wrap items-center gap-4 bg-slate-50/50 p-2 rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50/50 p-4 rounded-lg mt-2 border border-slate-100">
                     <!-- Nama Pengadaan Dropdown -->
-                    <div class="flex items-center flex-1 min-w-[200px]">
+                    <div class="flex items-center">
                         <label class="text-sm text-slate-500 w-36 shrink-0 font-medium">Nama Pengadaan :</label>
                         <div class="relative w-full">
-                            <select name="nama_pengadaan" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                            <select name="nama_pengadaan" onchange="this.form.submit()" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                                 <option value="">Semua</option>
                                 @foreach($namaPengadaans as $pengadaan)
-                                    <option value="{{ $pengadaan->title }}">{{ $pengadaan->title }}</option>
+                                    <option value="{{ $pengadaan->title }}" {{ request('nama_pengadaan') == $pengadaan->title ? 'selected' : '' }}>{{ $pengadaan->title }}</option>
                                 @endforeach
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
@@ -292,28 +350,13 @@
                     </div>
 
                     <!-- Nomor Kontrak Dropdown -->
-                    <div class="flex items-center flex-1 min-w-[200px]">
-                        <label class="text-sm text-slate-500 w-32 shrink-0 font-medium">Nomor Kontrak :</label>
+                    <div class="flex items-center">
+                        <label class="text-sm text-slate-500 w-36 shrink-0 font-medium pl-0 md:pl-4">Nomor Kontrak :</label>
                         <div class="relative w-full">
-                            <select name="nomor_kontrak" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                            <select name="nomor_kontrak" onchange="this.form.submit()" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                                 <option value="">Semua</option>
                                 @foreach($nomorKontraks as $kontrak)
-                                    <option value="{{ $kontrak->doc_number }}">{{ $kontrak->doc_number }}</option>
-                                @endforeach
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Vendor Dropdown -->
-                    <div class="flex items-center flex-1 min-w-[200px]">
-                        <div class="relative w-full">
-                            <select name="vendor" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
-                                <option value="">All Vendor</option>
-                                @foreach($vendors as $vendor)
-                                    <option value="{{ $vendor->vendor }}">{{ $vendor->vendor }}</option>
+                                    <option value="{{ $kontrak->doc_number }}" {{ request('nomor_kontrak') == $kontrak->doc_number ? 'selected' : '' }}>{{ $kontrak->doc_number }}</option>
                                 @endforeach
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
@@ -323,67 +366,121 @@
                     </div>
                 </div>
 
-            </div>
+            </form>
 
             <!-- Content Area Placeholder based on design -->
             <!-- Process Flow -->
-            <div class="bg-slate-100 rounded-xl p-6 mb-6">
-                <h3 class="text-sm font-semibold text-center text-slate-700 mb-6">Jumlah Kegiatan Saat Ini dan Durasi Rata-Rata Antar Pengadaan</h3>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 mb-6">
+                <h3 class="text-sm font-bold text-center text-slate-700 mb-8">Jumlah Kegiatan Saat Ini dan Durasi Rata-Rata Antar Pengadaan</h3>
                 
-                <div class="flex items-center justify-between gap-2 max-w-5xl mx-auto flex-wrap pb-4">
-                    <!-- Cards -->
+                <div class="flex items-center justify-center gap-x-2 gap-y-6 max-w-5xl mx-auto flex-wrap pb-4">
+                    
                     <!-- Dok Juskeb -->
-                    <div class="bg-blue-50 rounded-lg p-4 text-center w-36 shadow-sm border border-blue-100">
-                        <div class="text-xs font-semibold text-slate-700 mb-1">Dok Juskeb</div>
-                        <div class="text-3xl font-bold text-slate-800">0</div>
+                    <div class="bg-slate-100 rounded-xl p-3 text-center w-32 shadow-sm border border-slate-200/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Dok Juskeb</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['dok_juskeb']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200 h-1.5 w-full rounded-full"></div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['dok_juskeb']['avg_days'] ?? 0 }} days</div>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
 
                     <!-- Permintaan Pengadaan -->
-                    <div class="bg-orange-50 rounded-lg p-4 text-center w-36 shadow-sm border border-orange-100">
-                        <div class="text-xs font-semibold text-slate-700 mb-1">Permintaan<br>Pengadaan</div>
-                        <div class="text-3xl font-bold text-slate-800">0</div>
+                    <div class="bg-orange-50 rounded-xl p-3 text-center w-32 shadow-sm border border-orange-100/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Permintaan<br>Pengadaan</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['permintaan_pengadaan']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200 text-[10px] text-slate-600 rounded px-1 py-0.5">Avg : 12 days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['permintaan_pengadaan']['avg_days'] ?? 0 }} days</div>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
 
                     <!-- Dok Finance -->
-                    <div class="bg-purple-50 rounded-lg p-4 text-center w-36 shadow-sm border border-purple-100">
-                        <div class="text-xs font-semibold text-slate-700 mb-1">Dok Finance</div>
-                        <div class="text-3xl font-bold text-slate-800">0</div>
+                    <div class="bg-purple-50 rounded-xl p-3 text-center w-32 shadow-sm border border-purple-100/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Dok Finance</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['dok_finance']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200 text-[10px] text-slate-600 rounded px-1 py-0.5">Avg : 12 days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['dok_finance']['avg_days'] ?? 0 }} days</div>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
 
                     <!-- Pembuatan RKS -->
-                    <div class="bg-green-50 rounded-lg p-4 text-center w-36 shadow-sm border border-green-100">
-                        <div class="text-xs font-semibold text-slate-700 mb-1">Pembuatan RKS</div>
-                        <div class="text-3xl font-bold text-slate-800">1</div>
+                    <div class="bg-green-50 rounded-xl p-3 text-center w-32 shadow-sm border border-green-100/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Pembuatan RKS</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['pembuatan_rks']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200 text-[10px] text-slate-600 rounded px-1 py-0.5">Avg : 21 days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['pembuatan_rks']['avg_days'] ?? 0 }} days</div>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
                     
                     <!-- Rapat Penjelasan -->
-                    <div class="bg-blue-50 rounded-lg p-4 text-center w-36 shadow-sm border border-blue-100">
-                        <div class="text-xs font-semibold text-slate-700 mb-1">Rapat Penjelasan</div>
-                        <div class="text-3xl font-bold text-slate-800">0</div>
+                    <div class="bg-blue-50 rounded-xl p-3 text-center w-32 shadow-sm border border-blue-100/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Rapat Penjelasan</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['rapat_penjelasan']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200 text-[10px] text-slate-600 rounded px-1 py-0.5">Avg : 12 days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['rapat_penjelasan']['avg_days'] ?? 0 }} days</div>
                     </div>
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
                     
                     <!-- Evaluasi Proposal -->
-                    <div class="bg-blue-100 rounded-lg p-4 text-center w-36 shadow-sm border border-blue-200">
-                        <div class="text-xs font-semibold text-slate-700 mb-1">Evaluasi Proposal</div>
-                        <div class="text-3xl font-bold text-slate-800">1</div>
+                    <div class="bg-slate-100 rounded-xl p-3 text-center w-32 shadow-sm border border-slate-200/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Evaluasi Proposal</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['evaluasi_proposal']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200 text-[10px] text-slate-600 rounded px-1 py-0.5">Avg : 12 days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['evaluasi_proposal']['avg_days'] ?? 0 }} days</div>
                     </div>
+
+                    <!-- Pembuatan HPS -->
+                    <div class="bg-blue-50 rounded-xl p-3 text-center w-32 shadow-sm border border-blue-100/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Pembuatan HPS</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['pembuatan_hps']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-[10px] text-slate-500">(Total)</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['pembuatan_hps']['avg_days'] ?? 0 }} days</div>
+                    </div>
+                    
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
+
+                    <!-- Negoisasi -->
+                    <div class="bg-orange-50 rounded-xl p-3 text-center w-32 shadow-sm border border-orange-100/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Negoisasi</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['negoisasi']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-[10px] text-slate-500">(Total)</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['negoisasi']['avg_days'] ?? 0 }} days</div>
+                    </div>
+                    
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
+
+                    <!-- Penetapan -->
+                    <div class="bg-purple-50 rounded-xl p-3 text-center w-32 shadow-sm border border-purple-100/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Penetapan</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['penetapan']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-[10px] text-slate-500">(Total)</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['penetapan']['avg_days'] ?? 0 }} days</div>
+                    </div>
+                    
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
+
+                    <!-- Dokumen Kontrak -->
+                    <div class="bg-green-50 rounded-xl p-3 text-center w-32 shadow-sm border border-green-100/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Dokumen Kontrak</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['dokumen_kontrak']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-[10px] text-slate-500">(Total)</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['dokumen_kontrak']['avg_days'] ?? 0 }} days</div>
+                    </div>
+                    
+                    <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
+
+                    <!-- Kontrak -->
+                    <div class="bg-slate-100 rounded-xl p-3 text-center w-32 shadow-sm border border-slate-200/60">
+                        <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Kontrak</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['kontrak']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-[10px] text-slate-500">(Total)</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['kontrak']['avg_days'] ?? 0 }} days</div>
+                    </div>
+                    
                 </div>
             </div>
             
@@ -442,39 +539,31 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($tableData as $index => $row)
                             <tr class="border-b border-slate-50">
-                                <td class="py-3 px-4">01</td>
-                                <td class="py-3 px-4 font-medium text-blue-900">SP Restrukturisasi TITO INTI STO Jagir</td>
-                                <td class="py-3 px-4">Group Procurement Center</td>
-                                <td class="py-3 px-4">0,00</td>
-                                <td class="py-3 px-4">0,00</td>
-                                <td class="py-3 px-4 text-center">8</td>
-                                <td class="py-3 px-4">Penunjukan Langsung</td>
-                                <td class="py-3 px-4">Lumsum</td>
-                                <td class="py-3 px-4 text-green-500 font-medium">Leading</td>
+                                <td class="py-3 px-4">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</td>
+                                <td class="py-3 px-4 font-medium text-blue-900">{{ $row->nama_pengadaan }}</td>
+                                <td class="py-3 px-4">{{ $row->unit ?? '-' }}</td>
+                                <td class="py-3 px-4">{{ number_format($row->biaya ?? 0, 2, ',', '.') }}</td>
+                                <td class="py-3 px-4">{{ number_format($row->biaya_estimasi ?? 0, 2, ',', '.') }}</td>
+                                <td class="py-3 px-4 text-center">{{ round($row->durasi) ?? 0 }}</td>
+                                <td class="py-3 px-4">{{ $row->pola ?? '-' }}</td>
+                                <td class="py-3 px-4">{{ $row->perikatan ?? '-' }}</td>
+                                <td class="py-3 px-4">
+                                    @if(round($row->durasi) <= 14)
+                                        <span class="text-green-500 font-medium">Leading</span>
+                                    @elseif(round($row->durasi) <= 30)
+                                        <span class="text-slate-500 font-medium">On Track</span>
+                                    @else
+                                        <span class="text-red-500 font-medium">Late</span>
+                                    @endif
+                                </td>
                             </tr>
-                            <tr class="border-b border-slate-50">
-                                <td class="py-3 px-4">02</td>
-                                <td class="py-3 px-4 font-medium text-blue-900">SP Restrukturisasi TITO INTI STO Jagir</td>
-                                <td class="py-3 px-4">Group Procurement Center</td>
-                                <td class="py-3 px-4">0,00</td>
-                                <td class="py-3 px-4">0,00</td>
-                                <td class="py-3 px-4 text-center">42</td>
-                                <td class="py-3 px-4">Tender Terbatas</td>
-                                <td class="py-3 px-4">KHS</td>
-                                <td class="py-3 px-4 text-slate-500 font-medium">Cancelled</td>
+                            @empty
+                            <tr>
+                                <td colspan="9" class="py-8 text-center text-slate-500">Tidak ada data untuk kombinasi filter ini.</td>
                             </tr>
-                            <tr class="border-b border-slate-50">
-                                <td class="py-3 px-4">03</td>
-                                <td class="py-3 px-4 font-medium text-blue-900">SP Restrukturisasi TITO INTI STO Jagir</td>
-                                <td class="py-3 px-4">Group Procurement Center</td>
-                                <td class="py-3 px-4">0,00</td>
-                                <td class="py-3 px-4">0,00</td>
-                                <td class="py-3 px-4 text-center">38</td>
-                                <td class="py-3 px-4">SP</td>
-                                <td class="py-3 px-4">Lumsum</td>
-                                <td class="py-3 px-4 text-red-500 font-medium">Late</td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
