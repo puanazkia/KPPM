@@ -503,7 +503,7 @@
                 
                 <!-- Chart 2 -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col min-h-[350px]">
-                    <h4 class="text-center text-[11px] font-bold text-slate-800 mb-6">Jumlah Persiapan Pengadaan Terhadap Unit</h4>
+                    <h4 class="text-center text-[15px] font-bold text-slate-800 mb-6">Jumlah persiapan pengadaan terhadap unit</h4>
                     <div id="procurement-qty-chart" class="w-full flex-1 min-h-[260px]"></div>
                 </div>
             </div>
