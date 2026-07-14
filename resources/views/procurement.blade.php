@@ -488,9 +488,9 @@
             <!-- Dashboard bottom half just as placeholder to match layout -->
             <div class="grid grid-cols-2 gap-6 mb-6">
                 <!-- Chart 1 -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col items-center justify-center min-h-[350px]">
-                    <h4 class="text-sm font-semibold text-slate-700 mb-4">Rata-rata Hari Pengadaan Terhadap Unit</h4>
-                    <div class="flex items-end gap-4 h-40 w-full justify-center mt-4">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col min-h-[350px]">
+                    <h3 class="text-sm font-bold text-center text-slate-700 mb-8">Rata Rata Hari Pengadaan Terhadap Unit</h3>
+                    <div class="flex flex-1 items-end gap-4 w-full justify-center pb-8">
                         <!-- Bars Mock -->
                         <div class="w-8 bg-teal-400 h-10 rounded-t relative"><span class="absolute -top-5 left-1 text-xs">5</span></div>
                         <div class="w-8 bg-teal-500 h-32 rounded-t relative"><span class="absolute -top-5 left-1 text-xs">42</span></div>
@@ -503,7 +503,7 @@
                 
                 <!-- Chart 2 -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col min-h-[350px]">
-                    <h4 class="text-center text-[15px] font-bold text-slate-800 mb-6">Jumlah persiapan pengadaan terhadap unit</h4>
+                    <h3 class="text-sm font-bold text-center text-slate-700 mb-8">Jumlah Persiapan Pengadaan Terhadap Unit</h3>
                     <div id="procurement-qty-chart" class="w-full flex-1 min-h-[260px]"></div>
                 </div>
             </div>
