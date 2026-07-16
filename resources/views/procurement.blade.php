@@ -659,8 +659,8 @@
                                 <td class="py-3 px-4">{{ str_pad($tableData->firstItem() + $index, 2, '0', STR_PAD_LEFT) }}</td>
                                 <td class="py-3 px-4 font-medium text-blue-900">{{ $row->nama_pengadaan }}</td>
                                 <td class="py-3 px-4">{{ $row->category ?? '-' }}</td>
-                                <td class="py-3 px-4">{{ number_format($row->biaya ?? 0, 2, ',', '.') }}</td>
-                                <td class="py-3 px-4">{{ number_format($row->biaya_estimasi ?? 0, 2, ',', '.') }}</td>
+                                <td class="py-3 px-4 text-center text-slate-400">-</td>
+                                <td class="py-3 px-4 text-center text-slate-400">-</td>
                                 <td class="py-3 px-4 text-center">{{ $row->durasi !== null ? round($row->durasi) : '-' }}</td>
                                 <td class="py-3 px-4">{{ $row->pola ?? '-' }}</td>
                                 <td class="py-3 px-4">{{ $row->perikatan ?? '-' }}</td>
@@ -751,7 +751,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const categories = @json($cleanedCategories);
-            const rawSeries = @json($chartSeries);
 
             // ===== Chart 2: Jumlah Pengadaan Per Unit =====
             const qtyData = @json($totalPerUnit);
@@ -888,5 +887,4 @@
             });
         });
     </script>
-</body>
-</html>
+

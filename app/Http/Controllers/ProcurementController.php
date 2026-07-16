@@ -250,34 +250,34 @@ class ProcurementController extends Controller
         }
 
         // 4. Data Tabel Dinamis dengan Pagination
-        // Subquery: hitung durasi per nama_pengadaan dari MAX(tg_actual_finish) - MIN(tg_actual_finish)
-        $durasiSubquery = DB::table('kpdev.mart_procdash')
-            ->selectRaw("nama_pengadaan, DATE_PART('day', MAX(tg_actual_finish)::timestamp - MIN(tg_actual_finish)::timestamp) as durasi_pengadaan")
-            ->whereNotNull('tg_actual_finish')
-            ->groupBy('nama_pengadaan');
-
+        // Strategi deduplication:
+        // - GROUP BY (nama_pengadaan, cat, pola, perikatan) → baris yang berbeda di salah satu
+        //   kolom ini akan tetap tampil sebagai baris terpisah (bukan dihapus)
+        // - Baris yang SEMUA kolom tampilannya sama → hanya muncul sekali (dedup penuh)
+        // - Durasi = MAX(tg_actual_finish) - MIN(tg_actual_finish) per kombinasi group
+        // - Urutan: MAX(tg_actual_finish) DESC = pengadaan terbaru muncul pertama
         $tableData = DB::table('kpdev.mart_procdash')
-            ->leftJoin('kpdev.mart_procdash_saving', 'kpdev.mart_procdash.nama_pengadaan', '=', 'kpdev.mart_procdash_saving.title')
-            ->leftJoinSub($durasiSubquery, 'durasi_per_pengadaan', function($join) {
-                $join->on('kpdev.mart_procdash.nama_pengadaan', '=', 'durasi_per_pengadaan.nama_pengadaan');
-            })
             ->select(
-                'kpdev.mart_procdash.nama_pengadaan',
-                'kpdev.mart_procdash.cat as category', // Kolom unit diganti menggunakan kolom category (cat) sesuai permintaan
-                'kpdev.mart_procdash_saving.nilai_ss_juspeng as biaya_estimasi',
-                'kpdev.mart_procdash_saving.nilai_kontrak as biaya',
-                'durasi_per_pengadaan.durasi_pengadaan as durasi',
-                'kpdev.mart_procdash.pola',
-                'kpdev.mart_procdash.perikatan'
-            );
+                'nama_pengadaan',
+                'cat as category',
+                'pola',
+                'perikatan',
+                DB::raw("DATE_PART('day', MAX(tg_actual_finish)::timestamp - MIN(tg_actual_finish)::timestamp) as durasi"),
+                DB::raw('MAX(tg_actual_finish) as max_finish') // dipakai untuk urutan terbaru dulu
+            )
+            ->groupBy('nama_pengadaan', 'cat', 'pola', 'perikatan');
+
         $tableData = $applyFilters($tableData);
-        
+
         // Membaca input limit baris data dari request, default 5 baris
         $perPage = (int)$request->input('per_page', 5);
         if (!in_array($perPage, [5, 10, 25, 50])) {
             $perPage = 5;
         }
-        $tableData = $tableData->orderBy('kpdev.mart_procdash.tg_actual_finish', 'desc')->paginate($perPage)->withQueryString();
+        $tableData = $tableData
+            ->orderByDesc('max_finish') // data terbaru muncul pertama
+            ->paginate($perPage)
+            ->withQueryString();
 
         // 5. Data untuk Chart Jumlah Pengadaan Terhadap Kategori (cat) & Pola
         $chartDataRaw = DB::table('kpdev.mart_procdash')
