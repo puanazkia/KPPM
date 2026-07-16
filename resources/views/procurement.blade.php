@@ -146,7 +146,7 @@
       <div class="flex shrink-0 items-center mt-4">
         <div class="flex items-center gap-x-3 w-full p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
           <!-- Menggunakan w-auto dan object-contain agar gambar tidak gepeng/lonjong -->
-          <img class="h-8 w-auto object-contain rounded-md" src="/logo_finsight.jpeg" alt="Logo FinSight">
+          <img class="h-8 w-auto object-contain rounded-md" src="{{ asset('logo_finsight.jpeg') }}" alt="Logo FinSight">
         </div>
       </div>
 
