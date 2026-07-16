@@ -608,18 +608,18 @@
                 </div>
             </div>
             
-            <!-- Dashboard bottom half just as placeholder to match layout -->
-            <div class="grid grid-cols-2 gap-6 mb-6">
-                <!-- Chart 1: Rata Rata Hari Pengadaan Terhadap Unit (Dinamis) -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col min-h-[350px]">
-                    <h3 class="text-sm font-bold text-center text-slate-700 mb-4">Rata Rata Hari Pengadaan Terhadap Unit</h3>
-                    <div id="procurement-avg-duration-chart" class="w-full flex-1 min-h-[260px]"></div>
+            <!-- Dashboard bottom half: dua chart sejajar -->
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <!-- Chart 1: Rata Rata Hari Pengadaan Terhadap Unit -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 flex flex-col">
+                    <h3 class="text-sm font-bold text-center text-slate-700 mb-3">Rata Rata Hari Pengadaan Terhadap Unit</h3>
+                    <div id="procurement-avg-duration-chart" class="w-full" style="height: 280px;"></div>
                 </div>
-                
-                <!-- Chart 2 -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col min-h-[350px]">
-                    <h3 class="text-sm font-bold text-center text-slate-700 mb-8">Jumlah Persiapan Pengadaan Terhadap Unit</h3>
-                    <div id="procurement-qty-chart" class="w-full flex-1 min-h-[260px]"></div>
+
+                <!-- Chart 2: Jumlah Persiapan Pengadaan Terhadap Unit -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 flex flex-col">
+                    <h3 class="text-sm font-bold text-center text-slate-700 mb-3">Jumlah Persiapan Pengadaan Terhadap Unit</h3>
+                    <div id="procurement-qty-chart" class="w-full" style="height: 280px;"></div>
                 </div>
             </div>
 
@@ -753,234 +753,102 @@
             const categories = @json($cleanedCategories);
             const rawSeries = @json($chartSeries);
 
-            // Sort series in the order of the figma legend: Penunjukan Langsung, SP, Tender Terbatas
-            const desiredOrder = ['Penunjukan Langsung', 'SP', 'Tender Terbatas', 'Pelelangan'];
-            const sortedSeries = [...rawSeries].sort((a, b) => {
-                let idxA = desiredOrder.indexOf(a.name);
-                let idxB = desiredOrder.indexOf(b.name);
-                if (idxA === -1) idxA = 99;
-                if (idxB === -1) idxB = 99;
-                return idxA - idxB;
-            });
+            // ===== Chart 2: Jumlah Pengadaan Per Unit =====
+            const qtyData = @json($totalPerUnit);
+            const qtyCats = @json($cleanedCategories);
 
-            // Calculate grand total across all categories and series to get percentage contribution
-            let grandTotal = 0;
-            sortedSeries.forEach(s => {
-                s.data.forEach(val => {
-                    grandTotal += val || 0;
-                });
-            });
-
-            // Convert raw values to percentages
-            const percentageSeries = sortedSeries.map(s => {
-                return {
-                    name: s.name,
-                    data: s.data.map(val => {
-                        return grandTotal > 0 ? parseFloat(((val / grandTotal) * 100).toFixed(2)) : 0;
-                    })
-                };
-            });
-
-            // Custom category label splitter to make labels multi-line and not slanted (exactly like figma)
-            const splitLabel = (label) => {
-                if (label === 'ACCESS NETWORK & DEFA') {
-                    return ['ACCESS', 'NETWORK', '& DEFA'];
-                }
-                if (label === 'CORE & TRANSPORT NETWORK') {
-                    return ['CORE &', 'TRANSPORT', 'NETWORK'];
-                }
-                if (label === 'CORPORATE & SUPPORT SERVICE') {
-                    return ['CORPORATE &', 'SUPPORT', 'SERVICE'];
-                }
-                if (label === 'IT & DIGITAL') {
-                    return ['IT &', 'DIGITAL'];
-                }
-                if (label === 'IT & OTHERS') {
-                    return ['IT &', 'OTHERS'];
-                }
-                if (label === 'NETWORK') {
-                    return ['NETWORK'];
-                }
-                return label.split(' ');
-            };
-            const formattedCategories = categories.map(splitLabel);
-
-            // Figma palette colors
-            const colorsMap = {
-                'Penunjukan Langsung': '#14b8a6', // Teal 500
-                'SP': '#f43f5e',                  // Rose 500
-                'Tender Terbatas': '#f59e0b',     // Amber 500
-                'Pelelangan': '#6366f1'           // Indigo 500
-            };
-
-            const colors = percentageSeries.map(s => colorsMap[s.name] || '#94a3b8');
-
-            const options = {
-                series: percentageSeries,
+            const qtyOptions = {
+                series: [{ name: 'Jumlah Pengadaan', data: qtyData }],
                 chart: {
                     type: 'bar',
-                    height: '100%',
-                    stacked: true,
-                    toolbar: {
-                        show: false
-                    },
+                    height: 280,
+                    toolbar: { show: false },
                     fontFamily: 'Inter, sans-serif'
                 },
-                colors: colors,
+                colors: ['#93c5fd'],
                 plotOptions: {
                     bar: {
-                        horizontal: false,
-                        columnWidth: '18%', // Thinner bars (exactly like figma)
-                        borderRadius: 4,
-                        borderRadiusApplication: 'end',
-                        borderRadiusWhenStacked: 'last'
-                    },
+                        horizontal: true,
+                        barHeight: '60%',
+                        borderRadius: 3
+                    }
                 },
                 dataLabels: {
                     enabled: false
                 },
-                stroke: {
-                    width: 2,
-                    colors: ['#fff']
-                },
-                grid: {
-                    borderColor: '#f1f5f9',
-                    strokeDashArray: 4,
-                    xaxis: {
-                        lines: {
-                            show: false
-                        }
-                    },
-                    yaxis: {
-                        lines: {
-                            show: true
-                        }
-                    },
-                    padding: {
-                        left: 10,
-                        right: 10,
-                        top: 0,
-                        bottom: 0
-                    }
-                },
                 xaxis: {
-                    categories: formattedCategories,
+                    categories: qtyCats,
                     labels: {
-                        style: {
-                            colors: '#94a3b8',
-                            fontSize: '10px',
-                            fontWeight: 600
-                        }
+                        style: { colors: '#94a3b8', fontSize: '9px', fontWeight: 500 }
                     },
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false
-                    }
-                },
-                yaxis: {
-                    min: 0,
-                    max: 100,
-                    tickAmount: 4,
-                    labels: {
-                        formatter: function (value) {
-                            return value + "%";
-                        },
-                        style: {
-                            colors: '#94a3b8',
-                            fontSize: '11px',
-                            fontWeight: 500
-                        }
-                    }
-                },
-                legend: {
-                    position: 'bottom',
-                    horizontalAlign: 'center',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    labels: {
-                        colors: '#64748b'
-                    },
-                    markers: {
-                        width: 10,
-                        height: 10,
-                        radius: 12,
-                        offsetX: -3
-                    },
-                    itemMargin: {
-                        horizontal: 12,
-                        vertical: 5
-                    }
-                },
-                fill: {
-                    opacity: 1
-                },
-                tooltip: {
-                    y: {
-                        formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
-                            // Find the original raw count using matching series name
-                            const currentSeriesName = w.config.series[seriesIndex].name;
-                            const matchedRawSeries = rawSeries.find(rs => rs.name === currentSeriesName);
-                            const rawValue = matchedRawSeries ? (matchedRawSeries.data[dataPointIndex] || 0) : 0;
-                            return rawValue + " Pengadaan (" + val.toFixed(1) + "%)";
-                        }
-                    }
-                }
-            };
-
-            const chart = new ApexCharts(document.querySelector("#procurement-qty-chart"), options);
-            chart.render();
-
-            // ===== Chart 1: Rata Rata Hari Pengadaan Terhadap Unit =====
-            const avgDurData   = @json($avgDurations);
-            const avgDurCats   = @json($cleanedCategories);
-            const avgFormatted = avgDurCats.map(c => {
-                const words = c.split(' ');
-                const half  = Math.ceil(words.length / 2);
-                return [words.slice(0, half).join(' '), words.slice(half).join(' ')].filter(Boolean);
-            });
-
-            const avgOptions = {
-                series: [{ name: 'Rata-rata Hari', data: avgDurData }],
-                chart: {
-                    type: 'bar',
-                    height: '100%',
-                    toolbar: { show: false },
-                    fontFamily: 'Inter, sans-serif'
-                },
-                colors: ['#14b8a6'],
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '35%',
-                        borderRadius: 4,
-                        dataLabels: { position: 'top' }
-                    }
-                },
-                dataLabels: {
-                    enabled: true,
-                    formatter: val => val > 0 ? Math.round(val) + 'd' : '',
-                    offsetY: -18,
-                    style: { fontSize: '10px', colors: ['#64748b'], fontWeight: 600 }
-                },
-                xaxis: {
-                    categories: avgFormatted,
-                    labels: { style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 } },
                     axisBorder: { show: false },
                     axisTicks: { show: false }
                 },
                 yaxis: {
                     labels: {
-                        formatter: val => Math.round(val) + ' hr',
-                        style: { colors: '#94a3b8', fontSize: '11px' }
+                        style: { colors: '#64748b', fontSize: '9px', fontWeight: 500 },
+                        maxWidth: 200
                     }
                 },
                 grid: {
                     borderColor: '#f1f5f9',
-                    strokeDashArray: 4,
-                    yaxis: { lines: { show: true } },
-                    xaxis: { lines: { show: false } }
+                    strokeDashArray: 3,
+                    padding: { right: 30 },
+                    xaxis: { lines: { show: false } },
+                    yaxis: { lines: { show: false } }
+                },
+                tooltip: {
+                    y: { formatter: val => val + ' Pengadaan' }
+                },
+                legend: { show: false }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#procurement-qty-chart"), qtyOptions);
+            chart.render();
+
+            // ===== Chart 1: Rata Rata Hari Pengadaan Terhadap Unit =====
+            const avgDurData = @json($avgDurations);
+            const avgDurCats = @json($cleanedCategories);
+
+            const avgOptions = {
+                series: [{ name: 'Rata-rata Hari', data: avgDurData }],
+                chart: {
+                    type: 'bar',
+                    height: 280,
+                    toolbar: { show: false },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                colors: ['#fb923c'],
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        barHeight: '60%',
+                        borderRadius: 3
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    categories: avgDurCats,
+                    labels: {
+                        style: { colors: '#94a3b8', fontSize: '9px', fontWeight: 500 }
+                    },
+                    axisBorder: { show: false },
+                    axisTicks: { show: false }
+                },
+                yaxis: {
+                    labels: {
+                        style: { colors: '#64748b', fontSize: '9px', fontWeight: 500 },
+                        maxWidth: 200
+                    }
+                },
+                grid: {
+                    borderColor: '#f1f5f9',
+                    strokeDashArray: 3,
+                    padding: { right: 30 },
+                    xaxis: { lines: { show: false } },
+                    yaxis: { lines: { show: false } }
                 },
                 tooltip: {
                     y: { formatter: val => Math.round(val) + ' hari rata-rata' }

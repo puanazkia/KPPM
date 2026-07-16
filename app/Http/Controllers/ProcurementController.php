@@ -250,14 +250,23 @@ class ProcurementController extends Controller
         }
 
         // 4. Data Tabel Dinamis dengan Pagination
+        // Subquery: hitung durasi per nama_pengadaan dari MAX(tg_actual_finish) - MIN(tg_actual_finish)
+        $durasiSubquery = DB::table('kpdev.mart_procdash')
+            ->selectRaw("nama_pengadaan, DATE_PART('day', MAX(tg_actual_finish)::timestamp - MIN(tg_actual_finish)::timestamp) as durasi_pengadaan")
+            ->whereNotNull('tg_actual_finish')
+            ->groupBy('nama_pengadaan');
+
         $tableData = DB::table('kpdev.mart_procdash')
             ->leftJoin('kpdev.mart_procdash_saving', 'kpdev.mart_procdash.nama_pengadaan', '=', 'kpdev.mart_procdash_saving.title')
+            ->leftJoinSub($durasiSubquery, 'durasi_per_pengadaan', function($join) {
+                $join->on('kpdev.mart_procdash.nama_pengadaan', '=', 'durasi_per_pengadaan.nama_pengadaan');
+            })
             ->select(
                 'kpdev.mart_procdash.nama_pengadaan',
                 'kpdev.mart_procdash.cat as category', // Kolom unit diganti menggunakan kolom category (cat) sesuai permintaan
                 'kpdev.mart_procdash_saving.nilai_ss_juspeng as biaya_estimasi',
                 'kpdev.mart_procdash_saving.nilai_kontrak as biaya',
-                DB::raw("DATE_PART('day', kpdev.mart_procdash.tg_actual_finish::timestamp - kpdev.mart_procdash.tg_plan_finish::timestamp) as durasi"),
+                'durasi_per_pengadaan.durasi_pengadaan as durasi',
                 'kpdev.mart_procdash.pola',
                 'kpdev.mart_procdash.perikatan'
             );
@@ -301,15 +310,35 @@ class ProcurementController extends Controller
             return str_replace([' CATEGORY', ' OPERATION'], '', $cat);
         }, $chartCategories);
 
+        // 5b. Jumlah distinct nama_pengadaan per unit (cat) untuk chart "Jumlah Persiapan Pengadaan Terhadap Unit"
+        $totalPerUnitRaw = DB::table('kpdev.mart_procdash')
+            ->select('cat as category', DB::raw('COUNT(DISTINCT nama_pengadaan) as total'))
+            ->whereNotNull('cat');
+        $totalPerUnitRaw = $applyFilters($totalPerUnitRaw);
+        $totalPerUnitRaw = $totalPerUnitRaw->groupBy('cat')->get();
+
+        $totalPerUnit = [];
+        foreach ($chartCategories as $cat) {
+            $row = $totalPerUnitRaw->first(fn($v) => $v->category === $cat);
+            $totalPerUnit[] = $row ? (int)$row->total : 0;
+        }
+
         // 6. Data kalkulator untuk Chart Rata Rata Hari Pengadaan Terhadap Unit (cat)
-        $avgDurationRaw = DB::table('kpdev.mart_procdash')
-            ->select('cat as category', DB::raw("AVG(DATE_PART('day', tg_actual_finish::timestamp - tg_plan_finish::timestamp)) as avg_durasi"))
+        // Konsisten dengan tabel: durasi per nama_pengadaan = MAX(tg_actual_finish) - MIN(tg_actual_finish)
+        // kemudian dirata-ratakan per unit (cat)
+        $durasiPerPengadaanForChart = DB::table('kpdev.mart_procdash')
+            ->selectRaw("cat, nama_pengadaan, DATE_PART('day', MAX(tg_actual_finish)::timestamp - MIN(tg_actual_finish)::timestamp) as durasi_pengadaan")
             ->whereNotNull('cat')
-            ->whereNotNull('tg_actual_finish')
-            ->whereNotNull('tg_plan_finish')
+            ->whereNotNull('tg_actual_finish');
+
+        $durasiPerPengadaanForChart = $applyFilters($durasiPerPengadaanForChart);
+        $durasiPerPengadaanForChart->groupBy('cat', 'nama_pengadaan');
+
+        $avgDurationRaw = DB::table(DB::raw("({$durasiPerPengadaanForChart->toSql()}) as durasi_sub"))
+            ->mergeBindings($durasiPerPengadaanForChart)
+            ->selectRaw('cat as category, AVG(durasi_pengadaan) as avg_durasi')
             ->groupBy('cat');
-            
-        $avgDurationRaw = $applyFilters($avgDurationRaw);
+
         $avgDurationRaw = $avgDurationRaw->get();
         
         $avgDurations = [];
@@ -337,7 +366,8 @@ class ProcurementController extends Controller
             'tableData',
             'cleanedCategories',
             'chartSeries',
-            'avgDurations'
+            'avgDurations',
+            'totalPerUnit'
         ));
     }
 }
