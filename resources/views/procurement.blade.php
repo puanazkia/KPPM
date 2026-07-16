@@ -8,10 +8,131 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tom Select CSS & JS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #F8FAFC; /* Slate 50 */
+        }
+        /* Tom Select Custom Overrides to match Tailwind Premium Design */
+        /* Make the wrapper completely flat and transparent, reset default styling */
+        .ts-wrapper {
+            width: 100% !important;
+            padding: 0 !important;
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+            min-height: 0 !important;
+            cursor: pointer;
+        }
+        .ts-wrapper.single .ts-control {
+            background-image: none !important;
+            padding-right: 0 !important;
+        }
+        
+        /* Make the control box the primary styled visual element */
+        .ts-wrapper .ts-control {
+            border: 1px solid #E2E8F0 !important; /* border-slate-200 */
+            border-radius: 0.5rem !important; /* rounded-lg (8px) */
+            font-size: 0.875rem !important; /* text-sm */
+            color: #334155 !important; /* text-slate-700 */
+            padding: 0.5rem 2rem 0.5rem 0.75rem !important; /* py-2 pl-3 pr-8 (matches original select padding) */
+            box-shadow: none !important;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            min-height: 38px !important; /* Matches original select height */
+            display: flex !important;
+            align-items: center !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        
+        /* Focus styles applied to control box when parent wrapper is focused */
+        .ts-wrapper.focus .ts-control {
+            border-color: #3B82F6 !important; /* focus:ring-blue-500 */
+            box-shadow: 0 0 0 1px #3B82F6 !important;
+            outline: none !important;
+        }
+        
+        /* Background colors for different rows */
+        select.filter-slate-bg + .ts-wrapper .ts-control {
+            background-color: #F8FAFC !important; /* bg-slate-50 */
+        }
+        select.filter-white-bg + .ts-wrapper .ts-control {
+            background-color: #FFFFFF !important; /* bg-white */
+        }
+        
+        /* Padding-left adjustment for Tahun to clear calendar icon */
+        select.filter-tahun + .ts-wrapper .ts-control {
+            padding-left: 2.25rem !important; /* pl-9 (36px) */
+        }
+        
+        /* Style selected item text */
+        .ts-wrapper .ts-control > .item {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            color: inherit !important;
+            font-size: inherit !important;
+            line-height: inherit !important;
+        }
+        
+        /* Hide default dummy input text input cursor inside control box */
+        .ts-wrapper .ts-control input {
+            display: none !important;
+        }
+        
+        /* Dropdown panel styles */
+        .ts-dropdown {
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 0.5rem !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+            margin-top: 4px !important;
+            z-index: 50 !important;
+            background-color: #FFFFFF !important;
+        }
+        .ts-dropdown .option {
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.875rem !important;
+            color: #334155 !important;
+            cursor: pointer;
+        }
+        .ts-dropdown .active {
+            background-color: #EFF6FF !important; /* Blue 50 */
+            color: #1E40AF !important; /* Blue 800 */
+        }
+        .ts-dropdown .option:hover {
+            background-color: #F1F5F9 !important; /* Slate 100 */
+        }
+        /* Search input container within dropdown */
+        .ts-dropdown .dropdown-input-wrap {
+            padding: 6px !important;
+            background-color: #F8FAFC !important;
+            border-bottom: 1px solid #E2E8F0 !important;
+            border-top-left-radius: 0.5rem !important;
+            border-top-right-radius: 0.5rem !important;
+        }
+        .ts-dropdown .dropdown-input {
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 0.375rem !important;
+            padding: 0.375rem 0.75rem !important;
+            font-size: 0.875rem !important;
+            width: 100% !important;
+            outline: none !important;
+            background-color: #FFFFFF !important;
+            color: #334155 !important;
+        }
+        .ts-dropdown .dropdown-input:focus {
+            border-color: #3B82F6 !important;
+            box-shadow: 0 0 0 1px #3B82F6 !important;
+        }
+        /* Memunculkan kembali ikon chevron dan kalender asli di atas Tom Select */
+        .relative > .pointer-events-none {
+            z-index: 10 !important;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -266,8 +387,8 @@
                 <h1 class="text-3xl font-bold text-blue-600 mb-1">Proses Pengadaan</h1>
             </div>
 
-            <!-- Filters Section -->
-            <form method="GET" action="" class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 mb-8 flex flex-col gap-4">
+            <form method="GET" id="filter-form" action="" class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 mb-8 flex flex-col gap-4">
+                <input type="hidden" id="per-page-hidden" name="per_page" value="{{ $tableData->perPage() }}">
                 
                 <div class="flex items-center text-slate-700 font-semibold mb-2">
                     <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
@@ -278,20 +399,22 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Budget Dropdown -->
                     <div class="relative">
-                        <select name="budget" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                        <select name="budget" class="searchable-select filter-slate-bg w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                             <option value="">All Budget</option>
                             @foreach($budgets as $budget)
                                 <option value="{{ $budget->anggaran }}" {{ request('budget') == $budget->anggaran ? 'selected' : '' }}>{{ $budget->anggaran }}</option>
                             @endforeach
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
                     </div>
 
                     <!-- Unit Dropdown -->
                     <div class="relative">
-                        <select name="unit" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                        <select name="unit" class="searchable-select filter-slate-bg w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                             <option value="">All Unit</option>
                             @foreach($units as $item)
                                 <option value="{{ $item->category }}" {{ request('unit') == $item->category ? 'selected' : '' }}>{{ $item->category }}</option>
@@ -304,7 +427,7 @@
 
                     <!-- Activity Dropdown -->
                     <div class="relative">
-                        <select name="activity" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                        <select name="activity" class="searchable-select filter-slate-bg w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                             <option value="">All Activity</option>
                             @foreach($activities as $activity)
                                 <option value="{{ $activity->activity }}" {{ request('activity') == $activity->activity ? 'selected' : '' }}>{{ $activity->activity }}</option>
@@ -320,7 +443,7 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
-                        <select name="tahun" onchange="this.form.submit()" class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-9 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                        <select name="tahun" class="searchable-select filter-slate-bg filter-tahun w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2 pl-9 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                             <option value="">Tahun</option>
                             @foreach($tahuns as $tahun)
                                 <option value="{{ $tahun->tahun }}" {{ $selectedTahun == $tahun->tahun ? 'selected' : '' }}>{{ $tahun->tahun }}</option>
@@ -338,7 +461,7 @@
                     <div class="flex items-center">
                         <label class="text-sm text-slate-500 w-36 shrink-0 font-medium">Nama Pengadaan :</label>
                         <div class="relative w-full">
-                            <select name="nama_pengadaan" onchange="this.form.submit()" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                            <select name="nama_pengadaan" class="searchable-select filter-white-bg w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                                 <option value="">Semua</option>
                                 @foreach($namaPengadaans as $pengadaan)
                                     <option value="{{ $pengadaan->title }}" {{ request('nama_pengadaan') == $pengadaan->title ? 'selected' : '' }}>{{ $pengadaan->title }}</option>
@@ -354,7 +477,7 @@
                     <div class="flex items-center">
                         <label class="text-sm text-slate-500 w-36 shrink-0 font-medium pl-0 md:pl-4">Nomor Kontrak :</label>
                         <div class="relative w-full">
-                            <select name="nomor_kontrak" onchange="this.form.submit()" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
+                            <select name="nomor_kontrak" class="searchable-select filter-white-bg w-full appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-3 pr-8 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer">
                                 <option value="">Semua</option>
                                 @foreach($nomorKontraks as $kontrak)
                                     <option value="{{ $kontrak->doc_number }}" {{ request('nomor_kontrak') == $kontrak->doc_number ? 'selected' : '' }}>{{ $kontrak->doc_number }}</option>
@@ -487,18 +610,10 @@
             
             <!-- Dashboard bottom half just as placeholder to match layout -->
             <div class="grid grid-cols-2 gap-6 mb-6">
-                <!-- Chart 1 -->
+                <!-- Chart 1: Rata Rata Hari Pengadaan Terhadap Unit (Dinamis) -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col min-h-[350px]">
-                    <h3 class="text-sm font-bold text-center text-slate-700 mb-8">Rata Rata Hari Pengadaan Terhadap Unit</h3>
-                    <div class="flex flex-1 items-end gap-4 w-full justify-center pb-8">
-                        <!-- Bars Mock -->
-                        <div class="w-8 bg-teal-400 h-10 rounded-t relative"><span class="absolute -top-5 left-1 text-xs">5</span></div>
-                        <div class="w-8 bg-teal-500 h-32 rounded-t relative"><span class="absolute -top-5 left-1 text-xs">42</span></div>
-                        <div class="w-8 bg-orange-400 h-28 rounded-t relative"><span class="absolute -top-5 left-1 text-xs">38</span></div>
-                        <div class="w-8 bg-orange-400 h-16 rounded-t relative"><span class="absolute -top-5 left-1 text-xs">22</span></div>
-                        <div class="w-8 bg-red-500 h-12 rounded-t relative"><span class="absolute -top-5 left-1 text-xs">14</span></div>
-                        <div class="w-8 bg-red-600 h-8 rounded-t relative"><span class="absolute -top-5 left-2 text-xs">7</span></div>
-                    </div>
+                    <h3 class="text-sm font-bold text-center text-slate-700 mb-4">Rata Rata Hari Pengadaan Terhadap Unit</h3>
+                    <div id="procurement-avg-duration-chart" class="w-full flex-1 min-h-[260px]"></div>
                 </div>
                 
                 <!-- Chart 2 -->
@@ -512,9 +627,14 @@
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
                 <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
                     <h4 class="text-sm font-bold text-slate-800 border-b-2 border-blue-600 pb-2 inline-block -mb-[2px]">Detailed Cycle Time Data</h4>
-                    <div class="text-sm text-slate-500 flex items-center cursor-pointer">
-                        05 rows 
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <div class="flex items-center gap-2">
+                        <label for="per-page-select" class="text-sm text-slate-500">Tampilkan:</label>
+                        <select id="per-page-select" class="text-sm text-slate-600 border border-slate-200 rounded-lg px-2 py-1 bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="5" {{ $tableData->perPage() == 5 ? 'selected' : '' }}>05 rows</option>
+                            <option value="10" {{ $tableData->perPage() == 10 ? 'selected' : '' }}>10 rows</option>
+                            <option value="25" {{ $tableData->perPage() == 25 ? 'selected' : '' }}>25 rows</option>
+                            <option value="50" {{ $tableData->perPage() == 50 ? 'selected' : '' }}>50 rows</option>
+                        </select>
                     </div>
                 </div>
                 
@@ -536,23 +656,15 @@
                         <tbody>
                             @forelse($tableData as $index => $row)
                             <tr class="border-b border-slate-50">
-                                <td class="py-3 px-4">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</td>
+                                <td class="py-3 px-4">{{ str_pad($tableData->firstItem() + $index, 2, '0', STR_PAD_LEFT) }}</td>
                                 <td class="py-3 px-4 font-medium text-blue-900">{{ $row->nama_pengadaan }}</td>
-                                <td class="py-3 px-4">{{ $row->unit ?? '-' }}</td>
+                                <td class="py-3 px-4">{{ $row->category ?? '-' }}</td>
                                 <td class="py-3 px-4">{{ number_format($row->biaya ?? 0, 2, ',', '.') }}</td>
                                 <td class="py-3 px-4">{{ number_format($row->biaya_estimasi ?? 0, 2, ',', '.') }}</td>
-                                <td class="py-3 px-4 text-center">{{ round($row->durasi) ?? 0 }}</td>
+                                <td class="py-3 px-4 text-center">{{ $row->durasi !== null ? round($row->durasi) : '-' }}</td>
                                 <td class="py-3 px-4">{{ $row->pola ?? '-' }}</td>
                                 <td class="py-3 px-4">{{ $row->perikatan ?? '-' }}</td>
-                                <td class="py-3 px-4">
-                                    @if(round($row->durasi) <= 14)
-                                        <span class="text-green-500 font-medium">Leading</span>
-                                    @elseif(round($row->durasi) <= 30)
-                                        <span class="text-slate-500 font-medium">On Track</span>
-                                    @else
-                                        <span class="text-red-500 font-medium">Late</span>
-                                    @endif
-                                </td>
+                                <td class="py-3 px-4 text-center text-slate-400">-</td>
                             </tr>
                             @empty
                             <tr>
@@ -562,8 +674,77 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
 
+                {{-- Pagination --}}
+                @if($tableData->hasPages() || $tableData->total() > 0)
+                <div class="flex flex-col sm:flex-row items-center justify-between mt-5 gap-3">
+                    {{-- Info record --}}
+                    <span class="text-sm text-slate-500">
+                        Showing {{ $tableData->firstItem() ?? 0 }} to {{ $tableData->lastItem() ?? 0 }} of {{ number_format($tableData->total(), 0, ',', '.') }} records
+                    </span>
+
+                    {{-- Navigasi Halaman --}}
+                    @if($tableData->hasPages())
+                    <nav class="flex items-center gap-1">
+                        {{-- Tombol Sebelumnya --}}
+                        @if($tableData->onFirstPage())
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 cursor-not-allowed">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            </span>
+                        @else
+                            <a href="{{ $tableData->previousPageUrl() }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            </a>
+                        @endif
+
+                        {{-- Nomor Halaman --}}
+                        @php
+                            $currentPage = $tableData->currentPage();
+                            $lastPage = $tableData->lastPage();
+                            $delta = 2;
+                            $range = range(max(1, $currentPage - $delta), min($lastPage, $currentPage + $delta));
+                            $showFirst = !in_array(1, $range);
+                            $showLast = !in_array($lastPage, $range);
+                        @endphp
+
+                        @if($showFirst)
+                            <a href="{{ $tableData->url(1) }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">1</a>
+                            @if(!in_array(2, $range))
+                                <span class="w-8 h-8 flex items-center justify-center text-slate-400 text-sm">...</span>
+                            @endif
+                        @endif
+
+                        @foreach($range as $page)
+                            @if($page == $currentPage)
+                                <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white text-sm font-semibold">{{ $page }}</span>
+                            @else
+                                <a href="{{ $tableData->url($page) }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">{{ $page }}</a>
+                            @endif
+                        @endforeach
+
+                        @if($showLast)
+                            @if(!in_array($lastPage - 1, $range))
+                                <span class="w-8 h-8 flex items-center justify-center text-slate-400 text-sm">...</span>
+                            @endif
+                            <a href="{{ $tableData->url($lastPage) }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">{{ $lastPage }}</a>
+                        @endif
+
+                        {{-- Tombol Berikutnya --}}
+                        @if($tableData->hasMorePages())
+                            <a href="{{ $tableData->nextPageUrl() }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                        @else
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 cursor-not-allowed">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </span>
+                        @endif
+                    </nav>
+                    @endif
+                </div>
+                @endif
+
+            </div>
         </div>
     </main>
 
@@ -750,6 +931,93 @@
 
             const chart = new ApexCharts(document.querySelector("#procurement-qty-chart"), options);
             chart.render();
+
+            // ===== Chart 1: Rata Rata Hari Pengadaan Terhadap Unit =====
+            const avgDurData   = @json($avgDurations);
+            const avgDurCats   = @json($cleanedCategories);
+            const avgFormatted = avgDurCats.map(c => {
+                const words = c.split(' ');
+                const half  = Math.ceil(words.length / 2);
+                return [words.slice(0, half).join(' '), words.slice(half).join(' ')].filter(Boolean);
+            });
+
+            const avgOptions = {
+                series: [{ name: 'Rata-rata Hari', data: avgDurData }],
+                chart: {
+                    type: 'bar',
+                    height: '100%',
+                    toolbar: { show: false },
+                    fontFamily: 'Inter, sans-serif'
+                },
+                colors: ['#14b8a6'],
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '35%',
+                        borderRadius: 4,
+                        dataLabels: { position: 'top' }
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: val => val > 0 ? Math.round(val) + 'd' : '',
+                    offsetY: -18,
+                    style: { fontSize: '10px', colors: ['#64748b'], fontWeight: 600 }
+                },
+                xaxis: {
+                    categories: avgFormatted,
+                    labels: { style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 } },
+                    axisBorder: { show: false },
+                    axisTicks: { show: false }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: val => Math.round(val) + ' hr',
+                        style: { colors: '#94a3b8', fontSize: '11px' }
+                    }
+                },
+                grid: {
+                    borderColor: '#f1f5f9',
+                    strokeDashArray: 4,
+                    yaxis: { lines: { show: true } },
+                    xaxis: { lines: { show: false } }
+                },
+                tooltip: {
+                    y: { formatter: val => Math.round(val) + ' hari rata-rata' }
+                },
+                legend: { show: false }
+            };
+            new ApexCharts(document.querySelector('#procurement-avg-duration-chart'), avgOptions).render();
+
+            // ===== Per-page rows select =====
+            const perPageSelect = document.getElementById('per-page-select');
+            const perPageHidden = document.getElementById('per-page-hidden');
+            const filterForm    = document.getElementById('filter-form');
+
+            if (perPageSelect && perPageHidden && filterForm) {
+                perPageSelect.addEventListener('change', function() {
+                    perPageHidden.value = this.value;
+                    filterForm.submit();
+                });
+            }
+
+            // Inisialisasi Tom Select untuk semua filter data agar dapat dicari
+            document.querySelectorAll('.searchable-select').forEach(el => {
+                const ts = new TomSelect(el, {
+                    create: false,
+                    sortField: null, // Mempertahankan urutan pengurutan data dari backend
+                    allowEmptyOption: true,
+                    maxOptions: null, // Memuat seluruh opsi data yang ada dari database
+                    plugins: {
+                        dropdown_input: {} // Menampilkan kotak input pencarian di bagian atas dropdown list
+                    }
+                });
+
+                // Otomatis submit form ketika pengguna memilih opsi baru
+                ts.on('change', function(value) {
+                    el.form.submit();
+                });
+            });
         });
     </script>
 </body>

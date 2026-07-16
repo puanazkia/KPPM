@@ -14,7 +14,7 @@ class ProcurementController extends Controller
             'anggaran' => $request->input('budget'),
             'cat' => $request->input('unit'),
             'activity' => $request->input('activity'),
-            'tahun' => $request->input('tahun', '2025'),
+            'tahun' => $request->input('tahun'),
             'nama_pengadaan' => $request->input('nama_pengadaan'),
             'nomor_kontrak' => $request->input('nomor_kontrak'),
         ];
@@ -249,12 +249,12 @@ class ProcurementController extends Controller
             ];
         }
 
-        // 4. Data Tabel Dinamis
+        // 4. Data Tabel Dinamis dengan Pagination
         $tableData = DB::table('kpdev.mart_procdash')
             ->leftJoin('kpdev.mart_procdash_saving', 'kpdev.mart_procdash.nama_pengadaan', '=', 'kpdev.mart_procdash_saving.title')
             ->select(
                 'kpdev.mart_procdash.nama_pengadaan',
-                'kpdev.mart_procdash.unit',
+                'kpdev.mart_procdash.cat as category', // Kolom unit diganti menggunakan kolom category (cat) sesuai permintaan
                 'kpdev.mart_procdash_saving.nilai_ss_juspeng as biaya_estimasi',
                 'kpdev.mart_procdash_saving.nilai_kontrak as biaya',
                 DB::raw("DATE_PART('day', kpdev.mart_procdash.tg_actual_finish::timestamp - kpdev.mart_procdash.tg_plan_finish::timestamp) as durasi"),
@@ -262,7 +262,13 @@ class ProcurementController extends Controller
                 'kpdev.mart_procdash.perikatan'
             );
         $tableData = $applyFilters($tableData);
-        $tableData = $tableData->orderBy('kpdev.mart_procdash.tg_actual_finish', 'desc')->limit(100)->get();
+        
+        // Membaca input limit baris data dari request, default 5 baris
+        $perPage = (int)$request->input('per_page', 5);
+        if (!in_array($perPage, [5, 10, 25, 50])) {
+            $perPage = 5;
+        }
+        $tableData = $tableData->orderBy('kpdev.mart_procdash.tg_actual_finish', 'desc')->paginate($perPage)->withQueryString();
 
         // 5. Data untuk Chart Jumlah Pengadaan Terhadap Kategori (cat) & Pola
         $chartDataRaw = DB::table('kpdev.mart_procdash')
@@ -295,6 +301,26 @@ class ProcurementController extends Controller
             return str_replace([' CATEGORY', ' OPERATION'], '', $cat);
         }, $chartCategories);
 
+        // 6. Data kalkulator untuk Chart Rata Rata Hari Pengadaan Terhadap Unit (cat)
+        $avgDurationRaw = DB::table('kpdev.mart_procdash')
+            ->select('cat as category', DB::raw("AVG(DATE_PART('day', tg_actual_finish::timestamp - tg_plan_finish::timestamp)) as avg_durasi"))
+            ->whereNotNull('cat')
+            ->whereNotNull('tg_actual_finish')
+            ->whereNotNull('tg_plan_finish')
+            ->groupBy('cat');
+            
+        $avgDurationRaw = $applyFilters($avgDurationRaw);
+        $avgDurationRaw = $avgDurationRaw->get();
+        
+        $avgDurations = [];
+        foreach ($chartCategories as $cat) {
+            $row = $avgDurationRaw->first(function($value) use ($cat) {
+                return $value->category === $cat;
+            });
+            // Bulatkan ke satu tempat desimal
+            $avgDurations[] = $row ? round((float)$row->avg_durasi, 1) : 0;
+        }
+
         $selectedTahun = $filters['tahun'];
 
         // Lempar semua variabel ke View 'procurement'
@@ -310,7 +336,8 @@ class ProcurementController extends Controller
             'selectedTahun',
             'tableData',
             'cleanedCategories',
-            'chartSeries'
+            'chartSeries',
+            'avgDurations'
         ));
     }
 }
