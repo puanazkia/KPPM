@@ -497,14 +497,14 @@
             <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 mb-6">
                 <h3 class="text-sm font-bold text-center text-slate-700 mb-8">Jumlah Kegiatan Saat Ini dan Durasi Rata-Rata Antar Pengadaan</h3>
                 
-                <div class="flex items-center justify-center gap-x-2 gap-y-6 max-w-5xl mx-auto flex-wrap pb-4">
+                <div id="cards-container" class="flex items-center justify-center gap-x-2 gap-y-6 max-w-5xl mx-auto flex-wrap pb-4 transition-opacity duration-300">
                     
                     <!-- Dok Juskeb -->
                     <div class="bg-slate-100 rounded-xl p-3 text-center w-32 shadow-sm border border-slate-200/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Dok Juskeb</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['dok_juskeb']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-dok_juskeb">{{ number_format($stageStats['dok_juskeb']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['dok_juskeb']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-dok_juskeb">Avg : {{ $stageStats['dok_juskeb']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -512,9 +512,9 @@
                     <!-- Permintaan Pengadaan -->
                     <div class="bg-orange-50 rounded-xl p-3 text-center w-32 shadow-sm border border-orange-100/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Permintaan<br>Pengadaan</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['permintaan_pengadaan']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-permintaan_pengadaan">{{ number_format($stageStats['permintaan_pengadaan']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['permintaan_pengadaan']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-permintaan_pengadaan">Avg : {{ $stageStats['permintaan_pengadaan']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -522,9 +522,9 @@
                     <!-- Dok Finance -->
                     <div class="bg-purple-50 rounded-xl p-3 text-center w-32 shadow-sm border border-purple-100/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Dok Finance</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['dok_finance']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-dok_finance">{{ number_format($stageStats['dok_finance']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['dok_finance']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-dok_finance">Avg : {{ $stageStats['dok_finance']['avg_days'] ?? 0 }} days</div>
                     </div>
 
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -532,9 +532,9 @@
                     <!-- Pembuatan RKS -->
                     <div class="bg-green-50 rounded-xl p-3 text-center w-32 shadow-sm border border-green-100/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Pembuatan RKS</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['pembuatan_rks']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-pembuatan_rks">{{ number_format($stageStats['pembuatan_rks']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['pembuatan_rks']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-pembuatan_rks">Avg : {{ $stageStats['pembuatan_rks']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -542,9 +542,9 @@
                     <!-- Rapat Penjelasan -->
                     <div class="bg-blue-50 rounded-xl p-3 text-center w-32 shadow-sm border border-blue-100/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Rapat Penjelasan</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['rapat_penjelasan']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-rapat_penjelasan">{{ number_format($stageStats['rapat_penjelasan']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['rapat_penjelasan']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-rapat_penjelasan">Avg : {{ $stageStats['rapat_penjelasan']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -552,17 +552,17 @@
                     <!-- Evaluasi Proposal -->
                     <div class="bg-slate-100 rounded-xl p-3 text-center w-32 shadow-sm border border-slate-200/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Evaluasi Proposal</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['evaluasi_proposal']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-evaluasi_proposal">{{ number_format($stageStats['evaluasi_proposal']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['evaluasi_proposal']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-evaluasi_proposal">Avg : {{ $stageStats['evaluasi_proposal']['avg_days'] ?? 0 }} days</div>
                     </div>
 
                     <!-- Pembuatan HPS -->
                     <div class="bg-blue-50 rounded-xl p-3 text-center w-32 shadow-sm border border-blue-100/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Pembuatan HPS</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['pembuatan_hps']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-pembuatan_hps">{{ number_format($stageStats['pembuatan_hps']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['pembuatan_hps']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-pembuatan_hps">Avg : {{ $stageStats['pembuatan_hps']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -570,9 +570,9 @@
                     <!-- Negoisasi -->
                     <div class="bg-orange-50 rounded-xl p-3 text-center w-32 shadow-sm border border-orange-100/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Negoisasi</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['negoisasi']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-negoisasi">{{ number_format($stageStats['negoisasi']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['negoisasi']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-negoisasi">Avg : {{ $stageStats['negoisasi']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -580,9 +580,9 @@
                     <!-- Penetapan -->
                     <div class="bg-purple-50 rounded-xl p-3 text-center w-32 shadow-sm border border-purple-100/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Penetapan</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['penetapan']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-penetapan">{{ number_format($stageStats['penetapan']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['penetapan']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-penetapan">Avg : {{ $stageStats['penetapan']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -590,9 +590,9 @@
                     <!-- Dokumen Kontrak -->
                     <div class="bg-green-50 rounded-xl p-3 text-center w-32 shadow-sm border border-green-100/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Dokumen Kontrak</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['dokumen_kontrak']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-dokumen_kontrak">{{ number_format($stageStats['dokumen_kontrak']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['dokumen_kontrak']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-dokumen_kontrak">Avg : {{ $stageStats['dokumen_kontrak']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                     <svg class="w-4 h-4 text-slate-800 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path></svg>
@@ -600,9 +600,9 @@
                     <!-- Kontrak -->
                     <div class="bg-slate-100 rounded-xl p-3 text-center w-32 shadow-sm border border-slate-200/60">
                         <div class="text-xs font-semibold text-slate-700 mb-1 h-8 flex items-center justify-center leading-tight">Kontrak</div>
-                        <div class="text-4xl font-bold text-slate-700 my-1">{{ number_format($stageStats['kontrak']['count'] ?? 0, 0, ',', '.') }}</div>
+                        <div class="text-4xl font-bold text-slate-700 my-1" id="val-kontrak">{{ number_format($stageStats['kontrak']['count'] ?? 0, 0, ',', '.') }}</div>
                         <div class="text-[10px] text-slate-500">(Total)</div>
-                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full">Avg : {{ $stageStats['kontrak']['avg_days'] ?? 0 }} days</div>
+                        <div class="mt-2 bg-slate-200/70 text-[10px] text-slate-600 rounded px-1 py-1 w-full" id="avg-kontrak">Avg : {{ $stageStats['kontrak']['avg_days'] ?? 0 }} days</div>
                     </div>
                     
                 </div>
@@ -613,13 +613,13 @@
                 <!-- Chart 1: Rata Rata Hari Pengadaan Terhadap Unit -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 flex flex-col">
                     <h3 class="text-sm font-bold text-center text-slate-700 mb-3">Rata Rata Hari Pengadaan Terhadap Unit</h3>
-                    <div id="procurement-avg-duration-chart" class="w-full" style="height: 280px;"></div>
+                    <div id="procurement-avg-duration-chart" class="w-full transition-opacity duration-300" style="height: 280px;"></div>
                 </div>
 
                 <!-- Chart 2: Jumlah Persiapan Pengadaan Terhadap Unit -->
                 <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 flex flex-col">
                     <h3 class="text-sm font-bold text-center text-slate-700 mb-3">Jumlah Persiapan Pengadaan Terhadap Unit</h3>
-                    <div id="procurement-qty-chart" class="w-full" style="height: 280px;"></div>
+                    <div id="procurement-qty-chart" class="w-full transition-opacity duration-300" style="height: 280px;"></div>
                 </div>
             </div>
 
@@ -638,111 +638,9 @@
                     </div>
                 </div>
                 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-slate-600">
-                        <thead class="text-xs text-slate-500 font-medium border-b border-slate-100">
-                            <tr>
-                                <th class="py-3 px-4">No</th>
-                                <th class="py-3 px-4">Nama Pengadaan</th>
-                                <th class="py-3 px-4">Nama Unit</th>
-                                <th class="py-3 px-4">Biaya</th>
-                                <th class="py-3 px-4">Biaya Estimasi</th>
-                                <th class="py-3 px-4 text-center">Durasi Pengadaan</th>
-                                <th class="py-3 px-4">Pola</th>
-                                <th class="py-3 px-4">Perikatan</th>
-                                <th class="py-3 px-4">Leading/Late</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($tableData as $index => $row)
-                            <tr class="border-b border-slate-50">
-                                <td class="py-3 px-4">{{ str_pad($tableData->firstItem() + $index, 2, '0', STR_PAD_LEFT) }}</td>
-                                <td class="py-3 px-4 font-medium text-blue-900">{{ $row->nama_pengadaan }}</td>
-                                <td class="py-3 px-4">{{ $row->category ?? '-' }}</td>
-                                <td class="py-3 px-4 text-center text-slate-400">-</td>
-                                <td class="py-3 px-4 text-center text-slate-400">-</td>
-                                <td class="py-3 px-4 text-center">{{ $row->durasi !== null ? round($row->durasi) : '-' }}</td>
-                                <td class="py-3 px-4">{{ $row->pola ?? '-' }}</td>
-                                <td class="py-3 px-4">{{ $row->perikatan ?? '-' }}</td>
-                                <td class="py-3 px-4 text-center text-slate-400">-</td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="9" class="py-8 text-center text-slate-500">Tidak ada data untuk kombinasi filter ini.</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                <div id="table-container" class="transition-opacity duration-300">
+                    @include('partials.procurement_table', ['tableData' => $tableData])
                 </div>
-
-                {{-- Pagination --}}
-                @if($tableData->hasPages() || $tableData->total() > 0)
-                <div class="flex flex-col sm:flex-row items-center justify-between mt-5 gap-3">
-                    {{-- Info record --}}
-                    <span class="text-sm text-slate-500">
-                        Showing {{ $tableData->firstItem() ?? 0 }} to {{ $tableData->lastItem() ?? 0 }} of {{ number_format($tableData->total(), 0, ',', '.') }} records
-                    </span>
-
-                    {{-- Navigasi Halaman --}}
-                    @if($tableData->hasPages())
-                    <nav class="flex items-center gap-1">
-                        {{-- Tombol Sebelumnya --}}
-                        @if($tableData->onFirstPage())
-                            <span class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 cursor-not-allowed">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                            </span>
-                        @else
-                            <a href="{{ $tableData->previousPageUrl() }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                            </a>
-                        @endif
-
-                        {{-- Nomor Halaman --}}
-                        @php
-                            $currentPage = $tableData->currentPage();
-                            $lastPage = $tableData->lastPage();
-                            $delta = 2;
-                            $range = range(max(1, $currentPage - $delta), min($lastPage, $currentPage + $delta));
-                            $showFirst = !in_array(1, $range);
-                            $showLast = !in_array($lastPage, $range);
-                        @endphp
-
-                        @if($showFirst)
-                            <a href="{{ $tableData->url(1) }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">1</a>
-                            @if(!in_array(2, $range))
-                                <span class="w-8 h-8 flex items-center justify-center text-slate-400 text-sm">...</span>
-                            @endif
-                        @endif
-
-                        @foreach($range as $page)
-                            @if($page == $currentPage)
-                                <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white text-sm font-semibold">{{ $page }}</span>
-                            @else
-                                <a href="{{ $tableData->url($page) }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">{{ $page }}</a>
-                            @endif
-                        @endforeach
-
-                        @if($showLast)
-                            @if(!in_array($lastPage - 1, $range))
-                                <span class="w-8 h-8 flex items-center justify-center text-slate-400 text-sm">...</span>
-                            @endif
-                            <a href="{{ $tableData->url($lastPage) }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 transition-colors">{{ $lastPage }}</a>
-                        @endif
-
-                        {{-- Tombol Berikutnya --}}
-                        @if($tableData->hasMorePages())
-                            <a href="{{ $tableData->nextPageUrl() }}" class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                            </a>
-                        @else
-                            <span class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 cursor-not-allowed">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                            </span>
-                        @endif
-                    </nav>
-                    @endif
-                </div>
-                @endif
 
             </div>
         </div>
@@ -854,37 +752,124 @@
                 },
                 legend: { show: false }
             };
-            new ApexCharts(document.querySelector('#procurement-avg-duration-chart'), avgOptions).render();
+            const avgChart = new ApexCharts(document.querySelector('#procurement-avg-duration-chart'), avgOptions);
+            avgChart.render();
 
-            // ===== Per-page rows select =====
-            const perPageSelect = document.getElementById('per-page-select');
-            const perPageHidden = document.getElementById('per-page-hidden');
-            const filterForm    = document.getElementById('filter-form');
+            // Store chart instances globally or locally to be updated later
+            // We'll rename local chart instances so they don't clash and can be referenced
+            const qtyChart = chart; // from above
+            const chart1 = avgChart; 
+            // NOTE: the code below will just update qtyChart and avgChart
+            // renaming chart -> avgChart for clarity, I should fix the JS for this.
 
-            if (perPageSelect && perPageHidden && filterForm) {
-                perPageSelect.addEventListener('change', function() {
-                    perPageHidden.value = this.value;
-                    filterForm.submit();
+            // ===== AJAX Filter Handling =====
+            const filterForm = document.getElementById('filter-form');
+            const tableContainer = document.getElementById('table-container');
+            const cardsContainer = document.getElementById('cards-container');
+            const avgChartEl = document.getElementById('procurement-avg-duration-chart');
+            const qtyChartEl = document.getElementById('procurement-qty-chart');
+
+            function toggleLoading(isLoading) {
+                const elements = [tableContainer, cardsContainer, avgChartEl, qtyChartEl];
+                elements.forEach(el => {
+                    if (el) {
+                        if (isLoading) {
+                            el.classList.add('opacity-40', 'pointer-events-none');
+                        } else {
+                            el.classList.remove('opacity-40', 'pointer-events-none');
+                        }
+                    }
                 });
+            }
+
+            function fetchFilteredData(url) {
+                toggleLoading(true);
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update Cards
+                    for (const [key, stats] of Object.entries(data.stageStats)) {
+                        const valEl = document.getElementById('val-' + key);
+                        const avgEl = document.getElementById('avg-' + key);
+                        if (valEl) valEl.innerHTML = new Intl.NumberFormat('id-ID').format(stats.count);
+                        if (avgEl) avgEl.innerHTML = 'Avg : ' + stats.avg_days + ' days';
+                    }
+
+                    // Update Chart 1: Rata Rata Hari
+                    chart1.updateSeries([{
+                        name: 'Rata-rata Hari',
+                        data: data.chartData.avgDurData
+                    }]);
+                    
+                    // Update Chart 2: Jumlah Pengadaan
+                    qtyChart.updateSeries([{
+                        name: 'Jumlah Pengadaan',
+                        data: data.chartData.qtyData
+                    }]);
+
+                    // Update Table
+                    tableContainer.innerHTML = data.tableHtml;
+                    attachPaginationListeners();
+                })
+                .catch(error => console.error('Error fetching data:', error))
+                .finally(() => {
+                    toggleLoading(false);
+                });
+            }
+
+            function getFilterUrl() {
+                const formData = new FormData(filterForm);
+                const params = new URLSearchParams(formData);
+                const baseUrl = filterForm.getAttribute('action') ? filterForm.action : (window.location.origin + window.location.pathname);
+                return baseUrl + '?' + params.toString();
             }
 
             // Inisialisasi Tom Select untuk semua filter data agar dapat dicari
             document.querySelectorAll('.searchable-select').forEach(el => {
                 const ts = new TomSelect(el, {
                     create: false,
-                    sortField: null, // Mempertahankan urutan pengurutan data dari backend
+                    sortField: null,
                     allowEmptyOption: true,
-                    maxOptions: null, // Memuat seluruh opsi data yang ada dari database
+                    maxOptions: null,
                     plugins: {
-                        dropdown_input: {} // Menampilkan kotak input pencarian di bagian atas dropdown list
+                        dropdown_input: {}
                     }
                 });
 
-                // Otomatis submit form ketika pengguna memilih opsi baru
+                // Otomatis submit via AJAX form ketika pengguna memilih opsi baru
                 ts.on('change', function(value) {
-                    el.form.submit();
+                    fetchFilteredData(getFilterUrl());
                 });
             });
+
+            // ===== Per-page rows select =====
+            const perPageSelect = document.getElementById('per-page-select');
+            const perPageHidden = document.getElementById('per-page-hidden');
+
+            if (perPageSelect && perPageHidden) {
+                perPageSelect.addEventListener('change', function() {
+                    perPageHidden.value = this.value;
+                    fetchFilteredData(getFilterUrl());
+                });
+            }
+
+            // Pagination Link Click Handler
+            function attachPaginationListeners() {
+                document.querySelectorAll('.ajax-page').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const url = this.getAttribute('href');
+                        // update hidden inputs to match current state if needed, or just fetch directly
+                        fetchFilteredData(url);
+                    });
+                });
+            }
+            attachPaginationListeners();
         });
     </script>
 

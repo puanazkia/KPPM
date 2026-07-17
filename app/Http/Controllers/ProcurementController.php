@@ -350,6 +350,19 @@ class ProcurementController extends Controller
             $avgDurations[] = $row ? round((float)$row->avg_durasi, 1) : 0;
         }
 
+        if ($request->ajax()) {
+            $tableHtml = view('partials.procurement_table', compact('tableData'))->render();
+            return response()->json([
+                'stageStats' => $stageStats,
+                'chartData' => [
+                    'categories' => $cleanedCategories,
+                    'qtyData' => $totalPerUnit,
+                    'avgDurData' => $avgDurations
+                ],
+                'tableHtml' => $tableHtml
+            ]);
+        }
+
         $selectedTahun = $filters['tahun'];
 
         // Lempar semua variabel ke View 'procurement'
