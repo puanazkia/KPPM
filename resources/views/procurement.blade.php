@@ -829,6 +829,12 @@
                 return baseUrl + '?' + params.toString();
             }
 
+            // Cegah form melakukan full-page reload jika tidak sengaja menekan Enter
+            filterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                fetchFilteredData(getFilterUrl());
+            });
+
             // Inisialisasi Tom Select untuk semua filter data agar dapat dicari
             document.querySelectorAll('.searchable-select').forEach(el => {
                 const ts = new TomSelect(el, {
