@@ -368,6 +368,7 @@ class ProcurementController extends Controller
             $fileName = 'procurement_data_' . date('Y-m-d_H-i-s') . '.xlsx';
 
             return response()->streamDownload(function() use($exportData, $stageStats, $cleanedCategories, $totalPerUnit, $avgDurations, $filters) {
+                if (ob_get_length()) { ob_end_clean(); }
                 $options = new \OpenSpout\Writer\XLSX\Options();
                 $writer = new \OpenSpout\Writer\XLSX\Writer($options);
                 $writer->openToFile('php://output');
