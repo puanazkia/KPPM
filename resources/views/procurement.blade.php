@@ -390,9 +390,15 @@
             <form method="GET" id="filter-form" action="" class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 mb-8 flex flex-col gap-4">
                 <input type="hidden" id="per-page-hidden" name="per_page" value="{{ $tableData->perPage() }}">
                 
-                <div class="flex items-center text-slate-700 font-semibold mb-2">
-                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                    Filter Data
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center text-slate-700 font-semibold">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                        Filter Data
+                    </div>
+                    <button type="button" id="btn-export" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-1.5 px-4 rounded-lg flex items-center shadow-sm transition-colors text-sm cursor-pointer">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Export Excel
+                    </button>
                 </div>
 
                 <!-- Row 1: 4 Equal Width Dropdowns -->
@@ -852,6 +858,18 @@
                     fetchFilteredData(getFilterUrl());
                 });
             });
+
+            // ===== Export Button =====
+            const btnExport = document.getElementById('btn-export');
+            if (btnExport) {
+                btnExport.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = getFilterUrl();
+                    const separator = url.includes('?') ? '&' : '?';
+                    const exportUrl = url + separator + 'export=1';
+                    window.location.href = exportUrl;
+                });
+            }
 
             // ===== Per-page rows select =====
             const perPageSelect = document.getElementById('per-page-select');
