@@ -366,100 +366,102 @@ class ProcurementController extends Controller
             $exportData = $tableDataQueryForExport->orderByDesc('max_finish')->get();
 
             $fileName = 'procurement_data_' . date('Y-m-d_H-i-s') . '.xlsx';
+            $tempPath = sys_get_temp_dir() . '/' . $fileName;
 
-            return response()->streamDownload(function() use($exportData, $stageStats, $cleanedCategories, $totalPerUnit, $avgDurations, $filters) {
-                if (ob_get_length()) { ob_end_clean(); }
-                $options = new \OpenSpout\Writer\XLSX\Options();
-                $writer = new \OpenSpout\Writer\XLSX\Writer($options);
-                $writer->openToFile('php://output');
+            $options = new \OpenSpout\Writer\XLSX\Options();
+            $writer = new \OpenSpout\Writer\XLSX\Writer($options);
+            $writer->openToFile($tempPath);
 
-                // Header styles
-                $headerStyle = (new \OpenSpout\Common\Entity\Style\Style())
-                    ->setFontBold()
-                    ->setBackgroundColor('D9EAD3');
-                $subHeaderStyle = (new \OpenSpout\Common\Entity\Style\Style())
-                    ->setFontBold()
-                    ->setBackgroundColor('F3F3F3');
+            // Header styles
+            $headerStyle = (new \OpenSpout\Common\Entity\Style\Style())
+                ->setFontBold()
+                ->setBackgroundColor('D9EAD3');
+            $subHeaderStyle = (new \OpenSpout\Common\Entity\Style\Style())
+                ->setFontBold()
+                ->setBackgroundColor('F3F3F3');
 
-                // Sheet 1: Informasi Filter
-                $sheet1 = $writer->getCurrentSheet();
-                $sheet1->setName('Informasi Filter');
-                
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['INFORMASI FILTER'], $headerStyle));
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Parameter', 'Nilai'], $subHeaderStyle));
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Tahun', $filters['tahun'] ?: 'Semua']));
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Budget', $filters['anggaran'] ?: 'Semua']));
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Unit', $filters['cat'] ?: 'Semua']));
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Activity', $filters['activity'] ?: 'Semua']));
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Nama Pengadaan', $filters['nama_pengadaan'] ?: 'Semua']));
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Nomor Kontrak', $filters['nomor_kontrak'] ?: 'Semua']));
-                
-                // Sheet 2: Statistik Tahapan
-                $writer->addNewSheetAndMakeItCurrent();
-                $sheet2 = $writer->getCurrentSheet();
-                $sheet2->setName('Statistik Tahapan');
+            // Sheet 1: Informasi Filter
+            $sheet1 = $writer->getCurrentSheet();
+            $sheet1->setName('Informasi Filter');
+            
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['INFORMASI FILTER'], $headerStyle));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Parameter', 'Nilai'], $subHeaderStyle));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Tahun', $filters['tahun'] ?: 'Semua']));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Budget', $filters['anggaran'] ?: 'Semua']));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Unit', $filters['cat'] ?: 'Semua']));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Activity', $filters['activity'] ?: 'Semua']));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Nama Pengadaan', $filters['nama_pengadaan'] ?: 'Semua']));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Nomor Kontrak', $filters['nomor_kontrak'] ?: 'Semua']));
+            
+            // Sheet 2: Statistik Tahapan
+            $writer->addNewSheetAndMakeItCurrent();
+            $sheet2 = $writer->getCurrentSheet();
+            $sheet2->setName('Statistik Tahapan');
 
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Tahapan', 'Total Kegiatan', 'Rata-Rata Durasi (Hari)'], $headerStyle));
-                
-                $stageNames = [
-                    'dok_juskeb' => 'Dok Juskeb',
-                    'permintaan_pengadaan' => 'Permintaan Pengadaan',
-                    'dok_finance' => 'Dok Finance',
-                    'pembuatan_rks' => 'Pembuatan RKS',
-                    'rapat_penjelasan' => 'Rapat Penjelasan',
-                    'evaluasi_proposal' => 'Evaluasi Proposal',
-                    'pembuatan_hps' => 'Pembuatan HPS',
-                    'negoisasi' => 'Negoisasi',
-                    'penetapan' => 'Penetapan',
-                    'dokumen_kontrak' => 'Dokumen Kontrak',
-                    'kontrak' => 'Kontrak',
-                ];
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Tahapan', 'Total Kegiatan', 'Rata-Rata Durasi (Hari)'], $headerStyle));
+            
+            $stageNames = [
+                'dok_juskeb' => 'Dok Juskeb',
+                'permintaan_pengadaan' => 'Permintaan Pengadaan',
+                'dok_finance' => 'Dok Finance',
+                'pembuatan_rks' => 'Pembuatan RKS',
+                'rapat_penjelasan' => 'Rapat Penjelasan',
+                'evaluasi_proposal' => 'Evaluasi Proposal',
+                'pembuatan_hps' => 'Pembuatan HPS',
+                'negoisasi' => 'Negoisasi',
+                'penetapan' => 'Penetapan',
+                'dokumen_kontrak' => 'Dokumen Kontrak',
+                'kontrak' => 'Kontrak',
+            ];
 
-                foreach ($stageNames as $key => $name) {
-                    $count = $stageStats[$key]['count'] ?? 0;
-                    $avg = $stageStats[$key]['avg_days'] ?? 0;
-                    $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([$name, $count, $avg]));
-                }
+            foreach ($stageNames as $key => $name) {
+                $count = $stageStats[$key]['count'] ?? 0;
+                $avg = $stageStats[$key]['avg_days'] ?? 0;
+                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([$name, $count, $avg]));
+            }
 
-                // Sheet 3: Statistik Per Unit
-                $writer->addNewSheetAndMakeItCurrent();
-                $sheet3 = $writer->getCurrentSheet();
-                $sheet3->setName('Statistik Per Unit');
+            // Sheet 3: Statistik Per Unit
+            $writer->addNewSheetAndMakeItCurrent();
+            $sheet3 = $writer->getCurrentSheet();
+            $sheet3->setName('Statistik Per Unit');
 
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Unit / Kategori', 'Jumlah Pengadaan', 'Rata-Rata Hari Pengadaan'], $headerStyle));
-                
-                foreach ($cleanedCategories as $index => $category) {
-                    $total = $totalPerUnit[$index] ?? 0;
-                    $avg = $avgDurations[$index] ?? 0;
-                    $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([$category, $total, $avg]));
-                }
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Unit / Kategori', 'Jumlah Pengadaan', 'Rata-Rata Hari Pengadaan'], $headerStyle));
+            
+            foreach ($cleanedCategories as $index => $category) {
+                $total = $totalPerUnit[$index] ?? 0;
+                $avg = $avgDurations[$index] ?? 0;
+                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([$category, $total, $avg]));
+            }
 
-                // Sheet 4: Data Detail Pengadaan
-                $writer->addNewSheetAndMakeItCurrent();
-                $sheet4 = $writer->getCurrentSheet();
-                $sheet4->setName('Data Detail Pengadaan');
+            // Sheet 4: Data Detail Pengadaan
+            $writer->addNewSheetAndMakeItCurrent();
+            $sheet4 = $writer->getCurrentSheet();
+            $sheet4->setName('Data Detail Pengadaan');
 
-                $columns = ['No', 'Nama Pengadaan', 'Nama Unit', 'Biaya', 'Biaya Estimasi', 'Durasi Pengadaan', 'Pola', 'Perikatan', 'Leading/Late'];
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues($columns, $headerStyle));
+            $columns = ['No', 'Nama Pengadaan', 'Nama Unit', 'Biaya', 'Biaya Estimasi', 'Durasi Pengadaan', 'Pola', 'Perikatan', 'Leading/Late'];
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues($columns, $headerStyle));
 
-                foreach ($exportData as $index => $row) {
-                    $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([
-                        $index + 1,
-                        $row->nama_pengadaan,
-                        $row->category ?? '-',
-                        '-',
-                        '-',
-                        $row->durasi !== null ? round($row->durasi) : '-',
-                        $row->pola ?? '-',
-                        $row->perikatan ?? '-',
-                        '-'
-                    ]));
-                }
+            foreach ($exportData as $index => $row) {
+                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([
+                    $index + 1,
+                    $row->nama_pengadaan,
+                    $row->category ?? '-',
+                    '-',
+                    '-',
+                    $row->durasi !== null ? round($row->durasi) : '-',
+                    $row->pola ?? '-',
+                    $row->perikatan ?? '-',
+                    '-'
+                ]));
+            }
 
-                $writer->close();
-            }, $fileName, [
+            $writer->close();
+
+            if (ob_get_length()) { ob_end_clean(); }
+            
+            return response()->download($tempPath, $fileName, [
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            ]);
+            ])->deleteFileAfterSend(true);
         }
 
         if ($request->ajax()) {
