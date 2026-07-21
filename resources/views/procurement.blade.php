@@ -896,4 +896,3 @@
             attachPaginationListeners();
         });
     </script>
-

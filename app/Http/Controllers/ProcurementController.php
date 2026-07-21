@@ -310,7 +310,7 @@ class ProcurementController extends Controller
             $avgDurations = [];
             foreach ($chartCategories as $cat) {
                 $row = $diagramRataRataRaw->first(fn($v) => $v->category === $cat);
-                $avgDurations[] = $row ? round((float)$row->avg_durasi, 1) : 0;
+                $avgDurations[] = $row ? round((float)$row->avg_durasi) : 0;
             }
         } else {
             $avgDurationRawQuery = DB::table('kpdev.mart_procurement_summary')
@@ -341,7 +341,7 @@ class ProcurementController extends Controller
             $avgDurations = [];
             foreach ($chartCategories as $cat) {
                 $row = $avgDurationRaw->first(fn($value) => $value->category === $cat);
-                $avgDurations[] = $row ? round((float)$row->avg_durasi, 1) : 0;
+                $avgDurations[] = $row ? round((float)$row->avg_durasi) : 0;
             }
         }
 
@@ -350,9 +350,15 @@ class ProcurementController extends Controller
             $exportQuery = DB::table('kpdev.mart_procurement_summary')
                 ->select(
                     'nama_pengadaan',
+                    'nama_program',
                     'category',
                     'pola',
                     'perikatan',
+                    'anggaran',
+                    'activity',
+                    'tahun',
+                    'nomor_kontrak',
+                    'vendor',
                     'durasi',
                     'max_finish'
                 );
@@ -405,7 +411,7 @@ class ProcurementController extends Controller
             $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Nama Pengadaan', $filters['nama_pengadaan'] ?: 'Semua']));
             $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Nomor Kontrak', $filters['nomor_kontrak'] ?: 'Semua']));
             
-            // Sheet 2: Statistik Tahapan
+            // Sheet 2: Statistik Tahapan (Jumlah Kegiatan Saat Ini & Durasi Rata-rata)
             $writer->addNewSheetAndMakeItCurrent();
             $sheet2 = $writer->getCurrentSheet();
             $sheet2->setName('Statistik Tahapan');
@@ -432,38 +438,53 @@ class ProcurementController extends Controller
                 $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([$name, $count, $avg]));
             }
 
-            // Sheet 3: Statistik Per Unit
+            // Sheet 3: Rata-Rata Hari Terhadap Unit
             $writer->addNewSheetAndMakeItCurrent();
             $sheet3 = $writer->getCurrentSheet();
-            $sheet3->setName('Statistik Per Unit');
+            $sheet3->setName('Rata-Rata Hari per Unit');
 
-            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Unit / Kategori', 'Jumlah Pengadaan', 'Rata-Rata Hari Pengadaan'], $headerStyle));
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Unit / Kategori', 'Rata-Rata Hari Pengadaan'], $headerStyle));
+            
+            foreach ($cleanedCategories as $index => $category) {
+                $avg = $avgDurations[$index] ?? 0;
+                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([$category, $avg]));
+            }
+
+            // Sheet 4: Jumlah Pengadaan Terhadap Unit
+            $writer->addNewSheetAndMakeItCurrent();
+            $sheet4 = $writer->getCurrentSheet();
+            $sheet4->setName('Jumlah Pengadaan per Unit');
+
+            $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues(['Unit / Kategori', 'Jumlah Pengadaan'], $headerStyle));
             
             foreach ($cleanedCategories as $index => $category) {
                 $total = $totalPerUnit[$index] ?? 0;
-                $avg = $avgDurations[$index] ?? 0;
-                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([$category, $total, $avg]));
+                $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([$category, $total]));
             }
 
-            // Sheet 4: Data Detail Pengadaan
+            // Sheet 5: Data Detail Pengadaan (Detailed Cycle Time Data)
             $writer->addNewSheetAndMakeItCurrent();
-            $sheet4 = $writer->getCurrentSheet();
-            $sheet4->setName('Data Detail Pengadaan');
+            $sheet5 = $writer->getCurrentSheet();
+            $sheet5->setName('Detailed Cycle Time Data');
 
-            $columns = ['No', 'Nama Pengadaan', 'Nama Unit', 'Biaya', 'Biaya Estimasi', 'Durasi Pengadaan', 'Pola', 'Perikatan', 'Leading/Late'];
+            $columns = ['No', 'Nama Pengadaan', 'Nama Program', 'Kategori', 'Pola', 'Perikatan', 'Anggaran', 'Activity', 'Tahun', 'Nomor Kontrak', 'Vendor', 'Durasi (Hari)', 'Max Finish'];
             $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues($columns, $headerStyle));
 
             foreach ($exportData as $index => $row) {
                 $writer->addRow(\OpenSpout\Common\Entity\Row::fromValues([
                     $index + 1,
-                    $row->nama_pengadaan,
+                    $row->nama_pengadaan ?? '-',
+                    $row->nama_program ?? '-',
                     $row->category ?? '-',
-                    '-',
-                    '-',
-                    $row->durasi !== null ? round($row->durasi) : '-',
                     $row->pola ?? '-',
                     $row->perikatan ?? '-',
-                    '-'
+                    $row->anggaran ?? '-',
+                    $row->activity ?? '-',
+                    $row->tahun ?? '-',
+                    $row->nomor_kontrak ?? '-',
+                    $row->vendor ?? '-',
+                    $row->durasi !== null ? round($row->durasi) : '-',
+                    $row->max_finish ?? '-'
                 ]));
             }
 
