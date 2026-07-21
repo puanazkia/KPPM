@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Http\Request;
 
 class ProcurementController extends Controller
@@ -18,130 +17,54 @@ class ProcurementController extends Controller
             'nama_pengadaan' => $request->input('nama_pengadaan'),
             'nomor_kontrak' => $request->input('nomor_kontrak'),
         ];
-        
-        $applyFilters = function($query) use ($filters) {
-            $query->where('kpdev.mart_procdash.nama_program', 'not iLike', '%KHS%')
-                  ->where('kpdev.mart_procdash.nama_pengadaan', 'not iLike', '%KHS%');
 
-            if (!empty($filters['anggaran'])) {
-                $query->where('kpdev.mart_procdash.anggaran', $filters['anggaran']);
-            }
-            if (!empty($filters['cat'])) {
-                $query->where('kpdev.mart_procdash.cat', $filters['cat']);
-            }
-            if (!empty($filters['activity'])) {
-                $query->where('kpdev.mart_procdash.activity', $filters['activity']);
-            }
-            if (!empty($filters['tahun'])) {
-                $query->where('kpdev.mart_procdash.tahun', $filters['tahun']);
-            }
-            if (!empty($filters['nama_pengadaan'])) {
-                $query->where('kpdev.mart_procdash.nama_pengadaan', $filters['nama_pengadaan']);
-            }
-            if (!empty($filters['nomor_kontrak'])) {
-                $query->whereIn('kpdev.mart_procdash.nama_pengadaan', function($sub) use ($filters) {
-                    $sub->select('title')
-                        ->from('kpdev.mart_procdash_saving')
-                        ->where('doc_number', $filters['nomor_kontrak']);
-                });
-            }
-            return $query;
-        };
-
-        $applyFiltersForCards = function($query) use ($filters) {
-            $query->where('kpdev.mart_procdash.nama_program', 'not iLike', '%KHS%')
-                  ->where('kpdev.mart_procdash.nama_pengadaan', 'not iLike', '%KHS%');
-
-            if (!empty($filters['anggaran'])) {
-                $query->where('kpdev.mart_procdash.anggaran', $filters['anggaran']);
-            }
-            if (!empty($filters['cat'])) {
-                $query->where('kpdev.mart_procdash.cat', $filters['cat']);
-            }
-            if (!empty($filters['tahun'])) {
-                $query->where('kpdev.mart_procdash.tahun', $filters['tahun']);
-            }
-            if (!empty($filters['nama_pengadaan'])) {
-                $query->where('kpdev.mart_procdash.nama_pengadaan', $filters['nama_pengadaan']);
-            }
-            if (!empty($filters['nomor_kontrak'])) {
-                $query->whereIn('kpdev.mart_procdash.nama_pengadaan', function($sub) use ($filters) {
-                    $sub->select('title')
-                        ->from('kpdev.mart_procdash_saving')
-                        ->where('doc_number', $filters['nomor_kontrak']);
-                });
-            }
-            if (!empty($filters['activity'])) {
-                $query->whereIn('kpdev.mart_procdash.nama_pengadaan', function($sub) use ($filters) {
-                    $sub->select('nama_pengadaan')
-                        ->from('kpdev.mart_procdash')
-                        ->where('activity', $filters['activity'])
-                        ->where('nama_program', 'not iLike', '%KHS%')
-                        ->where('nama_pengadaan', 'not iLike', '%KHS%');
-                });
-            }
-            return $query;
-        };
-
-        // 1. Mengambil data master (distinct) dari kpdev.mart_procdash
-        $progresses = DB::table('kpdev.mart_procdash')
+        // 1. Mengambil data master (distinct) dari tabel kpdev.mart_procurement_summary
+        $progresses = DB::table('kpdev.mart_procurement_summary')
             ->select('nama_program')
             ->distinct()
             ->whereNotNull('nama_program')
-            ->where('nama_program', 'not iLike', '%KHS%')
-            ->where('nama_pengadaan', 'not iLike', '%KHS%')
             ->orderBy('nama_program')
             ->get();
 
-        $budgets = DB::table('kpdev.mart_procdash')
+        $budgets = DB::table('kpdev.mart_procurement_summary')
             ->select('anggaran')
             ->distinct()
             ->whereNotNull('anggaran')
-            ->where('nama_program', 'not iLike', '%KHS%')
-            ->where('nama_pengadaan', 'not iLike', '%KHS%')
             ->orderBy('anggaran')
             ->get();
 
-        $units = DB::table('kpdev.mart_procdash')
-            ->select('cat as category')
+        $units = DB::table('kpdev.mart_procurement_summary')
+            ->select('category')
             ->distinct()
-            ->whereNotNull('cat')
-            ->where('nama_program', 'not iLike', '%KHS%')
-            ->where('nama_pengadaan', 'not iLike', '%KHS%')
-            ->orderBy('cat')
+            ->whereNotNull('category')
+            ->orderBy('category')
             ->get();
 
-        $activities = DB::table('kpdev.mart_procdash')
+        $activities = DB::table('kpdev.mart_procurement_summary')
             ->select('activity')
             ->distinct()
             ->whereNotNull('activity')
-            ->where('nama_program', 'not iLike', '%KHS%')
-            ->where('nama_pengadaan', 'not iLike', '%KHS%')
             ->orderBy('activity')
             ->get();
 
-        $tahuns = DB::table('kpdev.mart_procdash')
+        $tahuns = DB::table('kpdev.mart_procurement_summary')
             ->select('tahun')
             ->distinct()
             ->whereNotNull('tahun')
-            ->where('nama_program', 'not iLike', '%KHS%')
-            ->where('nama_pengadaan', 'not iLike', '%KHS%')
             ->orderBy('tahun', 'desc')
             ->get();
-        
-        // 2. Mengambil data dari kpdev.mart_procdash (CASCADING & EXCLUDING KHS)
-        $namaPengadaansQuery = DB::table('kpdev.mart_procdash')
+
+        // 2. Data Cascading Filter untuk nama_pengadaan & nomor_kontrak dari kpdev.mart_procurement_summary
+        $namaPengadaansQuery = DB::table('kpdev.mart_procurement_summary')
             ->select('nama_pengadaan as title')
             ->distinct()
-            ->whereNotNull('nama_pengadaan')
-            ->where('nama_program', 'not iLike', '%KHS%')
-            ->where('nama_pengadaan', 'not iLike', '%KHS%');
+            ->whereNotNull('nama_pengadaan');
 
         if (!empty($filters['anggaran'])) {
             $namaPengadaansQuery->where('anggaran', $filters['anggaran']);
         }
         if (!empty($filters['cat'])) {
-            $namaPengadaansQuery->where('cat', $filters['cat']);
+            $namaPengadaansQuery->where('category', $filters['cat']);
         }
         if (!empty($filters['tahun'])) {
             $namaPengadaansQuery->where('tahun', $filters['tahun']);
@@ -150,42 +73,33 @@ class ProcurementController extends Controller
             $namaPengadaansQuery->where('activity', $filters['activity']);
         }
         if (!empty($filters['nomor_kontrak'])) {
-            $namaPengadaansQuery->whereIn('nama_pengadaan', function($sub) use ($filters) {
-                $sub->select('title')
-                    ->from('kpdev.mart_procdash_saving')
-                    ->where('doc_number', $filters['nomor_kontrak']);
-            });
+            $namaPengadaansQuery->where('nomor_kontrak', $filters['nomor_kontrak']);
         }
-        
         $namaPengadaans = $namaPengadaansQuery->orderBy('nama_pengadaan')->get();
-            
-        $nomorKontraksQuery = DB::table('kpdev.mart_procdash_saving')
-            ->join('kpdev.mart_procdash', 'kpdev.mart_procdash_saving.title', '=', 'kpdev.mart_procdash.nama_pengadaan')
-            ->select('kpdev.mart_procdash_saving.doc_number')
+
+        $nomorKontraksQuery = DB::table('kpdev.mart_procurement_summary')
+            ->select('nomor_kontrak as doc_number')
             ->distinct()
-            ->whereNotNull('kpdev.mart_procdash_saving.doc_number')
-            ->where('kpdev.mart_procdash.nama_program', 'not iLike', '%KHS%')
-            ->where('kpdev.mart_procdash.nama_pengadaan', 'not iLike', '%KHS%');
+            ->whereNotNull('nomor_kontrak');
 
         if (!empty($filters['anggaran'])) {
-            $nomorKontraksQuery->where('kpdev.mart_procdash.anggaran', $filters['anggaran']);
+            $nomorKontraksQuery->where('anggaran', $filters['anggaran']);
         }
         if (!empty($filters['cat'])) {
-            $nomorKontraksQuery->where('kpdev.mart_procdash.cat', $filters['cat']);
+            $nomorKontraksQuery->where('category', $filters['cat']);
         }
         if (!empty($filters['tahun'])) {
-            $nomorKontraksQuery->where('kpdev.mart_procdash.tahun', $filters['tahun']);
+            $nomorKontraksQuery->where('tahun', $filters['tahun']);
         }
         if (!empty($filters['activity'])) {
-            $nomorKontraksQuery->where('kpdev.mart_procdash.activity', $filters['activity']);
+            $nomorKontraksQuery->where('activity', $filters['activity']);
         }
         if (!empty($filters['nama_pengadaan'])) {
-            $nomorKontraksQuery->where('kpdev.mart_procdash.nama_pengadaan', $filters['nama_pengadaan']);
+            $nomorKontraksQuery->where('nama_pengadaan', $filters['nama_pengadaan']);
         }
+        $nomorKontraks = $nomorKontraksQuery->orderBy('nomor_kontrak')->get();
 
-        $nomorKontraks = $nomorKontraksQuery->orderBy('kpdev.mart_procdash_saving.doc_number')->get();
-
-        // 3. Data Statistik Tahapan Pengadaan (Jumlah & Durasi) - Berdasarkan tahap terakhir/terkini (DISTINCT ON)
+        // 3. Card Statistik Tahapan Pengadaan dari tabel kpdev.mart_procurement_card
         $procurementStages = [
             'dok_juskeb' => ['3101', '2101'],
             'permintaan_pengadaan' => ['3104', '2104'],
@@ -200,14 +114,31 @@ class ProcurementController extends Controller
             'kontrak' => ['3403', '2403', '5403'],
         ];
 
-        $latestStagesBase = DB::table('kpdev.mart_procdash')
-            ->selectRaw("DISTINCT ON (kpdev.mart_procdash.nama_pengadaan) kpdev.mart_procdash.nama_pengadaan, kpdev.mart_procdash.kd_prockon, kpdev.mart_procdash.tg_actual_finish, kpdev.mart_procdash.tg_plan_finish")
-            ->whereNotNull('kpdev.mart_procdash.nama_pengadaan')
-            ->orderBy('kpdev.mart_procdash.nama_pengadaan')
-            ->orderByRaw('kpdev.mart_procdash.tg_actual_finish DESC NULLS LAST')
-            ->orderBy('kpdev.mart_procdash.kd_prockon', 'desc');
+        $latestStagesBase = DB::table('kpdev.mart_procurement_card')
+            ->selectRaw("DISTINCT ON (nama_pengadaan) nama_pengadaan, kd_prockon, tg_actual_finish, tg_plan_finish")
+            ->whereNotNull('nama_pengadaan')
+            ->orderBy('nama_pengadaan')
+            ->orderByRaw('tg_actual_finish DESC NULLS LAST')
+            ->orderBy('kd_prockon', 'desc');
 
-        $latestStagesBase = $applyFiltersForCards($latestStagesBase);
+        if (!empty($filters['anggaran'])) {
+            $latestStagesBase->where('anggaran', $filters['anggaran']);
+        }
+        if (!empty($filters['cat'])) {
+            $latestStagesBase->where('cat', $filters['cat']);
+        }
+        if (!empty($filters['activity'])) {
+            $latestStagesBase->where('activity', $filters['activity']);
+        }
+        if (!empty($filters['tahun'])) {
+            $latestStagesBase->where('tahun', $filters['tahun']);
+        }
+        if (!empty($filters['nama_pengadaan'])) {
+            $latestStagesBase->where('nama_pengadaan', $filters['nama_pengadaan']);
+        }
+        if (!empty($filters['nomor_kontrak'])) {
+            $latestStagesBase->where('nomor_kontrak', $filters['nomor_kontrak']);
+        }
 
         $sql = $latestStagesBase->toSql();
         
@@ -249,44 +180,71 @@ class ProcurementController extends Controller
             ];
         }
 
-        // 4. Data Tabel Dinamis dengan Pagination
-        // Strategi deduplication:
-        // - GROUP BY (nama_pengadaan, cat, pola, perikatan) → baris yang berbeda di salah satu
-        //   kolom ini akan tetap tampil sebagai baris terpisah (bukan dihapus)
-        // - Baris yang SEMUA kolom tampilannya sama → hanya muncul sekali (dedup penuh)
-        // - Durasi = MAX(tg_actual_finish) - MIN(tg_actual_finish) per kombinasi group
-        // - Urutan: MAX(tg_actual_finish) DESC = pengadaan terbaru muncul pertama
-        $tableData = DB::table('kpdev.mart_procdash')
+        // 4. Data Tabel Dinamis dari kpdev.mart_procurement_summary
+        $tableDataQuery = DB::table('kpdev.mart_procurement_summary')
             ->select(
                 'nama_pengadaan',
-                'cat as category',
+                'category',
                 'pola',
                 'perikatan',
-                DB::raw("DATE_PART('day', MAX(tg_actual_finish)::timestamp - MIN(tg_actual_finish)::timestamp) as durasi"),
-                DB::raw('MAX(tg_actual_finish) as max_finish') // dipakai untuk urutan terbaru dulu
-            )
-            ->groupBy('nama_pengadaan', 'cat', 'pola', 'perikatan');
+                'durasi',
+                'max_finish'
+            );
 
-        $tableData = $applyFilters($tableData);
+        if (!empty($filters['anggaran'])) {
+            $tableDataQuery->where('anggaran', $filters['anggaran']);
+        }
+        if (!empty($filters['cat'])) {
+            $tableDataQuery->where('category', $filters['cat']);
+        }
+        if (!empty($filters['activity'])) {
+            $tableDataQuery->where('activity', $filters['activity']);
+        }
+        if (!empty($filters['tahun'])) {
+            $tableDataQuery->where('tahun', $filters['tahun']);
+        }
+        if (!empty($filters['nama_pengadaan'])) {
+            $tableDataQuery->where('nama_pengadaan', $filters['nama_pengadaan']);
+        }
+        if (!empty($filters['nomor_kontrak'])) {
+            $tableDataQuery->where('nomor_kontrak', $filters['nomor_kontrak']);
+        }
 
-        // Membaca input limit baris data dari request, default 5 baris
         $perPage = (int)$request->input('per_page', 5);
         if (!in_array($perPage, [5, 10, 25, 50])) {
             $perPage = 5;
         }
-        $tableData = $tableData
-            ->orderByDesc('max_finish') // data terbaru muncul pertama
+
+        $tableData = $tableDataQuery
+            ->orderByDesc('max_finish')
             ->paginate($perPage)
             ->withQueryString();
 
-        // 5. Data untuk Chart Jumlah Pengadaan Terhadap Kategori (cat) & Pola
-        $chartDataRaw = DB::table('kpdev.mart_procdash')
-            ->select('cat as category', 'pola', DB::raw('count(DISTINCT nama_pengadaan) as total'))
-            ->whereNotNull('cat')
-            ->groupBy('cat', 'pola');
+        // 5. Data Chart Jumlah Pengadaan (Category & Pola) dari kpdev.mart_procurement_summary
+        $chartDataRawQuery = DB::table('kpdev.mart_procurement_summary')
+            ->select('category', 'pola', DB::raw('count(DISTINCT nama_pengadaan) as total'))
+            ->whereNotNull('category');
         
-        $chartDataRaw = $applyFilters($chartDataRaw);
-        $chartDataRaw = $chartDataRaw->get();
+        if (!empty($filters['anggaran'])) {
+            $chartDataRawQuery->where('anggaran', $filters['anggaran']);
+        }
+        if (!empty($filters['cat'])) {
+            $chartDataRawQuery->where('category', $filters['cat']);
+        }
+        if (!empty($filters['activity'])) {
+            $chartDataRawQuery->where('activity', $filters['activity']);
+        }
+        if (!empty($filters['tahun'])) {
+            $chartDataRawQuery->where('tahun', $filters['tahun']);
+        }
+        if (!empty($filters['nama_pengadaan'])) {
+            $chartDataRawQuery->where('nama_pengadaan', $filters['nama_pengadaan']);
+        }
+        if (!empty($filters['nomor_kontrak'])) {
+            $chartDataRawQuery->where('nomor_kontrak', $filters['nomor_kontrak']);
+        }
+
+        $chartDataRaw = $chartDataRawQuery->groupBy('category', 'pola')->get();
 
         $chartCategories = $chartDataRaw->pluck('category')->unique()->values()->all();
         $chartSeriesNames = $chartDataRaw->whereNotNull('pola')->pluck('pola')->unique()->values()->all();
@@ -310,12 +268,31 @@ class ProcurementController extends Controller
             return str_replace([' CATEGORY', ' OPERATION'], '', $cat);
         }, $chartCategories);
 
-        // 5b. Jumlah distinct nama_pengadaan per unit (cat) untuk chart "Jumlah Persiapan Pengadaan Terhadap Unit"
-        $totalPerUnitRaw = DB::table('kpdev.mart_procdash')
-            ->select('cat as category', DB::raw('COUNT(DISTINCT nama_pengadaan) as total'))
-            ->whereNotNull('cat');
-        $totalPerUnitRaw = $applyFilters($totalPerUnitRaw);
-        $totalPerUnitRaw = $totalPerUnitRaw->groupBy('cat')->get();
+        // 5b. Total Pengadaan per Unit dari kpdev.mart_procurement_summary
+        $totalPerUnitRawQuery = DB::table('kpdev.mart_procurement_summary')
+            ->select('category', DB::raw('COUNT(DISTINCT nama_pengadaan) as total'))
+            ->whereNotNull('category');
+
+        if (!empty($filters['anggaran'])) {
+            $totalPerUnitRawQuery->where('anggaran', $filters['anggaran']);
+        }
+        if (!empty($filters['cat'])) {
+            $totalPerUnitRawQuery->where('category', $filters['cat']);
+        }
+        if (!empty($filters['activity'])) {
+            $totalPerUnitRawQuery->where('activity', $filters['activity']);
+        }
+        if (!empty($filters['tahun'])) {
+            $totalPerUnitRawQuery->where('tahun', $filters['tahun']);
+        }
+        if (!empty($filters['nama_pengadaan'])) {
+            $totalPerUnitRawQuery->where('nama_pengadaan', $filters['nama_pengadaan']);
+        }
+        if (!empty($filters['nomor_kontrak'])) {
+            $totalPerUnitRawQuery->where('nomor_kontrak', $filters['nomor_kontrak']);
+        }
+
+        $totalPerUnitRaw = $totalPerUnitRawQuery->groupBy('category')->get();
 
         $totalPerUnit = [];
         foreach ($chartCategories as $cat) {
@@ -323,47 +300,83 @@ class ProcurementController extends Controller
             $totalPerUnit[] = $row ? (int)$row->total : 0;
         }
 
-        // 6. Data kalkulator untuk Chart Rata Rata Hari Pengadaan Terhadap Unit (cat)
-        // Konsisten dengan tabel: durasi per nama_pengadaan = MAX(tg_actual_finish) - MIN(tg_actual_finish)
-        // kemudian dirata-ratakan per unit (cat)
-        $durasiPerPengadaanForChart = DB::table('kpdev.mart_procdash')
-            ->selectRaw("cat, nama_pengadaan, DATE_PART('day', MAX(tg_actual_finish)::timestamp - MIN(tg_actual_finish)::timestamp) as durasi_pengadaan")
-            ->whereNotNull('cat')
-            ->whereNotNull('tg_actual_finish');
+        // 6. Data Chart Rata-Rata Hari Pengadaan Terhadap Unit
+        // Menggunakan tabel kpdev.mart_procurement_diagram_rata-rata jika TIDAK ADA filter
+        // Jika ADA filter, dikalkulasi dari kpdev.mart_procurement_summary
+        $hasActiveFilters = !empty($filters['anggaran']) || !empty($filters['cat']) || !empty($filters['activity']) || !empty($filters['tahun']) || !empty($filters['nama_pengadaan']) || !empty($filters['nomor_kontrak']);
 
-        $durasiPerPengadaanForChart = $applyFilters($durasiPerPengadaanForChart);
-        $durasiPerPengadaanForChart->groupBy('cat', 'nama_pengadaan');
+        if (!$hasActiveFilters) {
+            $diagramRataRataRaw = DB::table('kpdev.mart_procurement_diagram_rata-rata')->get();
+            $avgDurations = [];
+            foreach ($chartCategories as $cat) {
+                $row = $diagramRataRataRaw->first(fn($v) => $v->category === $cat);
+                $avgDurations[] = $row ? round((float)$row->avg_durasi, 1) : 0;
+            }
+        } else {
+            $avgDurationRawQuery = DB::table('kpdev.mart_procurement_summary')
+                ->selectRaw('category, AVG(durasi) as avg_durasi')
+                ->whereNotNull('category');
 
-        $avgDurationRaw = DB::table(DB::raw("({$durasiPerPengadaanForChart->toSql()}) as durasi_sub"))
-            ->mergeBindings($durasiPerPengadaanForChart)
-            ->selectRaw('cat as category, AVG(durasi_pengadaan) as avg_durasi')
-            ->groupBy('cat');
+            if (!empty($filters['anggaran'])) {
+                $avgDurationRawQuery->where('anggaran', $filters['anggaran']);
+            }
+            if (!empty($filters['cat'])) {
+                $avgDurationRawQuery->where('category', $filters['cat']);
+            }
+            if (!empty($filters['activity'])) {
+                $avgDurationRawQuery->where('activity', $filters['activity']);
+            }
+            if (!empty($filters['tahun'])) {
+                $avgDurationRawQuery->where('tahun', $filters['tahun']);
+            }
+            if (!empty($filters['nama_pengadaan'])) {
+                $avgDurationRawQuery->where('nama_pengadaan', $filters['nama_pengadaan']);
+            }
+            if (!empty($filters['nomor_kontrak'])) {
+                $avgDurationRawQuery->where('nomor_kontrak', $filters['nomor_kontrak']);
+            }
 
-        $avgDurationRaw = $avgDurationRaw->get();
-        
-        $avgDurations = [];
-        foreach ($chartCategories as $cat) {
-            $row = $avgDurationRaw->first(function($value) use ($cat) {
-                return $value->category === $cat;
-            });
-            // Bulatkan ke bilangan bulat terdekat (ke atas jika >= 0.5)
-            $avgDurations[] = $row ? round((float)$row->avg_durasi) : 0;
+            $avgDurationRaw = $avgDurationRawQuery->groupBy('category')->get();
+
+            $avgDurations = [];
+            foreach ($chartCategories as $cat) {
+                $row = $avgDurationRaw->first(fn($value) => $value->category === $cat);
+                $avgDurations[] = $row ? round((float)$row->avg_durasi, 1) : 0;
+            }
         }
 
+        // 7. Proses Export ke Excel dari kpdev.mart_procurement_summary
         if ($request->has('export') && $request->input('export') == '1') {
-            $tableDataQueryForExport = DB::table('kpdev.mart_procdash')
+            $exportQuery = DB::table('kpdev.mart_procurement_summary')
                 ->select(
                     'nama_pengadaan',
-                    'cat as category',
+                    'category',
                     'pola',
                     'perikatan',
-                    DB::raw("DATE_PART('day', MAX(tg_actual_finish)::timestamp - MIN(tg_actual_finish)::timestamp) as durasi"),
-                    DB::raw('MAX(tg_actual_finish) as max_finish')
-                )
-                ->groupBy('nama_pengadaan', 'cat', 'pola', 'perikatan');
+                    'durasi',
+                    'max_finish'
+                );
 
-            $tableDataQueryForExport = $applyFilters($tableDataQueryForExport);
-            $exportData = $tableDataQueryForExport->orderByDesc('max_finish')->get();
+            if (!empty($filters['anggaran'])) {
+                $exportQuery->where('anggaran', $filters['anggaran']);
+            }
+            if (!empty($filters['cat'])) {
+                $exportQuery->where('category', $filters['cat']);
+            }
+            if (!empty($filters['activity'])) {
+                $exportQuery->where('activity', $filters['activity']);
+            }
+            if (!empty($filters['tahun'])) {
+                $exportQuery->where('tahun', $filters['tahun']);
+            }
+            if (!empty($filters['nama_pengadaan'])) {
+                $exportQuery->where('nama_pengadaan', $filters['nama_pengadaan']);
+            }
+            if (!empty($filters['nomor_kontrak'])) {
+                $exportQuery->where('nomor_kontrak', $filters['nomor_kontrak']);
+            }
+
+            $exportData = $exportQuery->orderByDesc('max_finish')->get();
 
             $fileName = 'procurement_data_' . date('Y-m-d_H-i-s') . '.xlsx';
             $tempPath = sys_get_temp_dir() . '/' . $fileName;
@@ -372,7 +385,6 @@ class ProcurementController extends Controller
             $writer = new \OpenSpout\Writer\XLSX\Writer($options);
             $writer->openToFile($tempPath);
 
-            // Header styles
             $headerStyle = (new \OpenSpout\Common\Entity\Style\Style())
                 ->setFontBold()
                 ->setBackgroundColor('D9EAD3');
@@ -479,7 +491,6 @@ class ProcurementController extends Controller
 
         $selectedTahun = $filters['tahun'];
 
-        // Lempar semua variabel ke View 'procurement'
         return view('procurement', compact(
             'progresses', 
             'budgets', 
